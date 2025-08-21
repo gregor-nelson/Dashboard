@@ -1,0 +1,13 @@
+{
+  "latitude": 57.144,
+  "longitude": -2.096,
+  "generationtime_ms": 0.045,
+  "utc_offset_seconds": 0,
+  "timezone": "Europe/London",
+  "timezone_abbreviation": "GMT",
+  "elevation": 65.0,
+  "current": {},
+  "hourly": {
+    "time": []
+  }
+}
