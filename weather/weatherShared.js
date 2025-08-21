@@ -1,13 +1,13 @@
 export function createWeatherCard(title, icon) {
     return `
-    <div class="weather-widget-card bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+    <div class="weather-widget-card p-6">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <i class="ph ${icon} text-2xl"></i>
                 <h3 class="text-xl font-semibold">${title}</h3>
             </div>
             <div class="flex items-center gap-2">
-                <button class="widget-refresh p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors">
+                <button class="widget-refresh p-2">
                     <i class="ph ph-arrows-clockwise text-lg"></i>
                 </button>
             </div>

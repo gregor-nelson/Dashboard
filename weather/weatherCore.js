@@ -34,19 +34,19 @@ export const advancedWeather = {
                             <h3 class="text-lg font-semibold">Weather — Aberdeen</h3>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button id="weather-units" class="px-2 py-1 text-xs rounded hover:bg-white hover:bg-opacity-10 transition-colors">
+                            <button id="weather-units" class="px-2 py-1 text-xs">
                                 ${this.getUnitsLabel()}
                             </button>
-                            <button id="weather-refresh" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Refresh">
+                            <button id="weather-refresh" class="p-2" title="Refresh">
                                 <i class="ph ph-arrows-clockwise text-lg"></i>
                             </button>
                             <div class="relative">
-                                <button id="weather-settings" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" 
+                                <button id="weather-settings" class="p-2"
                                         title="Weather Settings" aria-haspopup="menu" aria-expanded="false">
                                     <i class="ph ph-gear text-lg"></i>
                                 </button>
                                 <!-- Settings Popover -->
-                                <div id="weather-settings-popover" class="absolute right-0 top-8 z-[100] w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-4 hidden" role="menu">
+                                <div id="weather-settings-popover" class="absolute right-0 top-8 z-[100] w-80 p-4 hidden" role="menu">
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-sm font-medium text-white">Weather Settings</h4>
@@ -59,11 +59,11 @@ export const advancedWeather = {
                                         <div class="space-y-2">
                                             <label class="text-xs font-medium text-gray-300">Units</label>
                                             <div class="flex gap-2">
-                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-gray-600 transition-colors" 
+                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs transition-colors"
                                                         data-units="metric" role="menuitemradio">
                                                     Metric (°C, km/h)
                                                 </button>
-                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-gray-600 transition-colors" 
+                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs transition-colors"
                                                         data-units="imperial" role="menuitemradio">
                                                     Imperial (°F, mph)
                                                 </button>
@@ -1554,7 +1554,7 @@ export const advancedWeather = {
                             const weatherInfo = this.deps.utils.weatherUtils.getWeatherInfo(weatherCode);
                             
                             return `
-                                <div class="flex items-center justify-between p-2 hover:bg-white hover:bg-opacity-5 rounded">
+                                <div class="flex items-center justify-between p-2">
                                     <div class="flex items-center gap-3 min-w-0 flex-1">
                                         <div class="text-sm font-medium w-12 flex-shrink-0">
                                             ${time.getHours().toString().padStart(2, '0')}:00
@@ -1603,7 +1603,7 @@ export const advancedWeather = {
                         const weatherInfo = this.deps.utils.weatherUtils.getWeatherInfo(weatherCode);
                         
                         return `
-                            <div class="flex items-center justify-between p-3 hover:bg-white hover:bg-opacity-5 rounded-lg">
+                            <div class="flex items-center justify-between p-3">
                                 <div class="flex items-center gap-4 min-w-0 flex-1">
                                     <div class="text-sm font-medium w-16 flex-shrink-0">
                                         ${i === 0 ? 'Today' : date.toLocaleDateString('en-GB', { weekday: 'short' })}
@@ -1842,27 +1842,27 @@ export const advancedWeather = {
                     <div class="p-4 bg-white bg-opacity-10 rounded-lg">
                         <h4 class="text-sm font-medium text-gray-300 mb-3">Classic Weather Views</h4>
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="now">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="now">
                                 <i class="ph ph-clock text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Now</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="hourly">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="hourly">
                                 <i class="ph ph-chart-line text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Hourly</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="daily">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="daily">
                                 <i class="ph ph-calendar text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Daily</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="airquality">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="airquality">
                                 <i class="ph ph-leaf text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Air Quality</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="marine">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="marine">
                                 <i class="ph ph-waves text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Marine</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="history">
+                            <button class="legacy-tab-btn p-3 transition-colors" data-legacy-tab="history">
                                 <i class="ph ph-chart-bar text-xl mb-2"></i>
                                 <div class="text-sm font-medium">History</div>
                             </button>

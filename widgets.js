@@ -24,13 +24,13 @@ export const widgets = {
                             <h3 class="text-lg font-semibold">Daily Quote</h3>
                         </div>
                         <div class="quote-actions flex gap-2">
-                            <button id="quote-copy" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Copy Quote">
+                            <button id="quote-copy" class="p-2" title="Copy Quote">
                                 <i class="ph ph-copy text-lg"></i>
                             </button>
-                            <button id="quote-shuffle" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Random Quote">
+                            <button id="quote-shuffle" class="p-2" title="Random Quote">
                                 <i class="ph ph-shuffle text-lg"></i>
                             </button>
-                            <button id="quote-context" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Show Context">
+                            <button id="quote-context" class="p-2" title="Show Context">
                                 <i class="ph ph-info text-lg"></i>
                             </button>
                         </div>
@@ -89,7 +89,7 @@ export const widgets = {
                         </div>
                     </div>
                     
-                    <div class="text-sm text-gray-300 border-t border-white border-opacity-20 pt-3">
+                    <div class="text-sm text-gray-300 pt-3">
                         <p class="font-medium">${quote.work}</p>
                         <p>Translated by ${quote.translator}</p>
                     </div>
@@ -302,7 +302,7 @@ export const widgets = {
                         const typeIcon = this.getEventIcon(event.type);
                         
                         return `
-                            <div class="flex items-start gap-3 p-2 hover:bg-white hover:bg-opacity-5 rounded-lg transition-colors">
+                            <div class="flex items-start gap-3 p-2">
                                 <i class="ph ${typeIcon} text-lg mt-0.5 flex-shrink-0"></i>
                                 <div class="flex-1 min-w-0">
                                     <div class="font-medium text-sm truncate">${event.title}</div>

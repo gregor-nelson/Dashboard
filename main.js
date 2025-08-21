@@ -638,7 +638,7 @@ function copyToClipboard(text) {
 function showToast(message) {
     // Create toast element
     const toast = document.createElement('div');
-    toast.className = 'fixed top-4 right-4 glass-card rounded-lg px-4 py-2 text-white z-50 transform translate-x-full transition-transform duration-300';
+    toast.className = 'fixed top-4 right-4 glass-card px-4 py-2 z-50 transform translate-x-full transition-transform duration-300';
     toast.textContent = message;
     
     document.body.appendChild(toast);
@@ -673,7 +673,7 @@ async function renderWidgets() {
     
     for (const widget of enabledWidgets) {
         const widgetElement = document.createElement('div');
-        widgetElement.className = `glass-card rounded-lg p-6 text-white ${widget.size || 'col-span-1'}`;
+        widgetElement.className = `glass-card ${widget.size || 'col-span-1'}`;
         widgetElement.id = `widget-${widget.id}`;
         
         try {
@@ -781,9 +781,9 @@ function renderSettings() {
 function updateTheme() {
     const body = document.body;
     if (state.settings.darkTheme) {
-        body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
+        body.setAttribute('data-theme', 'dark');
     } else {
-        body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        body.setAttribute('data-theme', 'light');
     }
 }
 
