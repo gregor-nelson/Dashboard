@@ -1,5 +1,7 @@
 // Widget Registry
 import { renderUtils } from './testing.js';
+import { weatherPresentation } from './weatherPresentation.js';
+import { WeatherDataAdapter } from './weatherDataAdapter.js';
 export const widgets = {
     quote: {
         id: 'quote',
@@ -253,10 +255,14 @@ export const widgets = {
         nowcastData: null,
         currentTab: 'command',
         refreshTimeout: null,
+        dataAdapter: null,
         
         async mount(container, deps) {
             this.container = container;
             this.deps = deps;
+            
+            // Initialize data adapter
+            this.dataAdapter = new WeatherDataAdapter(deps.utils.weatherUtils);
             
             container.innerHTML = `
                 <div class="weather-widget">
@@ -369,7 +375,7 @@ export const widgets = {
                     </div>
                     
                     <div class="weather-tabs mb-4">
-                        <nav class="grid grid-cols-4 lg:grid-cols-8 gap-1 bg-white bg-opacity-10 rounded-lg p-1">
+                        <nav class="grid grid-cols-7 gap-1 bg-white bg-opacity-10 rounded-lg p-1">
                             <button class="weather-tab-btn py-2 px-2 text-xs font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300" data-tab="command" title="Command Center">
                                 <i class="ph ph-flag text-lg mb-1"></i>
                                 <div>Cmd</div>
@@ -397,10 +403,6 @@ export const widgets = {
                             <button class="weather-tab-btn py-2 px-2 text-xs font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300" data-tab="advanced" title="Advanced">
                                 <i class="ph ph-lightning text-lg mb-1"></i>
                                 <div>Adv</div>
-                            </button>
-                            <button class="weather-tab-btn py-2 px-2 text-xs font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300" data-tab="legacy" title="Classic View">
-                                <i class="ph ph-list text-lg mb-1"></i>
-                                <div>List</div>
                             </button>
                         </nav>
                     </div>
@@ -432,94 +434,6 @@ export const widgets = {
             return this.deps?.state?.settings?.widgets?.weather?.units || 'metric';
         },
         
-        verifyAlignment(hourly, keys) {
-            if (!hourly || !hourly.time) {
-                return { valid: false, issues: ['No hourly.time array'], missingKeys: keys };
-            }
-            
-            const timeLength = hourly.time.length;
-            const issues = [];
-            const missingKeys = [];
-            
-            keys.forEach(key => {
-                if (!hourly[key]) {
-                    missingKeys.push(key);
-                } else if (Array.isArray(hourly[key]) && hourly[key].length !== timeLength) {
-                    issues.push(`Data length mismatch: ${key} (${hourly[key].length} vs ${timeLength})`);
-                    if (window.__WX_DIAG__?.isEnabled) {
-                        console.warn(`⚠️ ${key} length mismatch:`, hourly[key].length, 'vs', timeLength);
-                    }
-                }
-            });
-            
-            return {
-                valid: issues.length === 0 && missingKeys.length === 0,
-                issues,
-                missingKeys,
-                timeLength
-            };
-        },
-
-        pickPressureSeries(hourly) {
-            if (hourly.surface_pressure && Array.isArray(hourly.surface_pressure)) {
-                return {
-                    key: 'surface_pressure',
-                    data: hourly.surface_pressure,
-                    label: 'Surface Pressure',
-                    unit: 'hPa'
-                };
-            } else if (hourly.pressure_msl && Array.isArray(hourly.pressure_msl)) {
-                return {
-                    key: 'pressure_msl',
-                    data: hourly.pressure_msl,
-                    label: 'Sea Level Pressure',
-                    unit: 'hPa'
-                };
-            }
-            
-            return {
-                key: null,
-                data: [],
-                label: 'Not available (pressure)',
-                unit: 'hPa'
-            };
-        },
-
-        convertValueWithoutMutation(value, fromUnit, toUnit, type = 'temperature') {
-            if (value === null || value === undefined) return value;
-            
-            // Temperature conversion
-            if (type === 'temperature') {
-                if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
-                    return (value * 9/5) + 32;
-                } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
-                    return (value - 32) * 5/9;
-                }
-                return value;
-            }
-            
-            // Wind speed conversion
-            if (type === 'wind') {
-                if (fromUnit === 'kmh' && toUnit === 'mph') {
-                    return value * 0.621371;
-                } else if (fromUnit === 'mph' && toUnit === 'kmh') {
-                    return value / 0.621371;
-                }
-                return value;
-            }
-            
-            // Pressure conversion
-            if (type === 'pressure') {
-                if (fromUnit === 'hPa' && toUnit === 'inHg') {
-                    return value * 0.02953;
-                } else if (fromUnit === 'inHg' && toUnit === 'hPa') {
-                    return value / 0.02953;
-                }
-                return value;
-            }
-            
-            return value;
-        },
 
         setupSettingsPopover() {
             if (!this.container || !this.deps) return;
@@ -1015,33 +929,6 @@ export const widgets = {
         },
 
         // Phase 5: Visual & State Integrity helpers
-        renderStateTriad(data, key, options = {}) {
-            const { index = 0, unit = '', missingText = 'Not available', loadingText = 'Loading...', noDataText = 'No data in range' } = options;
-            
-            // Loading state
-            if (data === null || data === undefined) {
-                return `<span class="text-gray-400">${loadingText}</span>`;
-            }
-            
-            // Not available state (key missing)
-            if (!data.hasOwnProperty(key)) {
-                return `<span class="text-orange-300">${missingText}</span>`;
-            }
-            
-            const value = Array.isArray(data[key]) ? data[key][index] : data[key];
-            
-            // No data in range (array exists but empty or null/undefined value)
-            if (value === null || value === undefined) {
-                return `<span class="text-gray-400">—</span>`;
-            }
-            
-            // Valid data (including legitimate 0)
-            if (typeof value === 'number') {
-                return `${value}${unit}`;
-            }
-            
-            return `${value}${unit}`;
-        },
 
         renderChart(data, minPoints = 2, fallbackValue = null, fallbackUnit = '') {
             if (!Array.isArray(data) || data.length < minPoints) {
@@ -1276,9 +1163,6 @@ export const widgets = {
                 case 'advanced':
                     this.renderAdvanced(contentEl);
                     break;
-                case 'legacy':
-                    this.renderLegacy(contentEl);
-                    break;
                 // Legacy tabs
                 case 'now':
                     this.renderNow(contentEl);
@@ -1302,78 +1186,8 @@ export const widgets = {
         },
 
         renderCommand(contentEl) {
-            if (!this.weatherData?.current || !this.weatherData?.hourly) {
-                contentEl.innerHTML = this.getErrorMessage('Weather data unavailable');
-                return;
-            }
-
-            const current = this.weatherData.current;
-            const hourly = this.weatherData.hourly;
-            const daily = this.weatherData.daily;
+            // Get processed data from adapter
             const units = this.getUnits();
-            const utils = this.deps.utils.weatherUtils;
-
-            // Verify data alignment for critical fields
-            const criticalKeys = [
-                'precipitation_probability', 'visibility', 'uv_index', 
-                'wind_speed_10m', 'wind_gusts_10m', 'temperature_2m'
-            ];
-            const alignment = this.verifyAlignment(hourly, criticalKeys);
-            
-            if (!alignment.valid && window.__WX_DIAG__?.isEnabled) {
-                console.warn('⚠️ Data alignment issues in command center:', alignment);
-            }
-
-            // Show alignment issues as notices
-            let alignmentNotices = '';
-            if (alignment.issues.length > 0) {
-                alignmentNotices = alignment.issues.map(issue => 
-                    `<div class="text-xs text-orange-300 mb-1">⚠️ ${issue}</div>`
-                ).join('');
-            }
-            
-            // Show missing key notices
-            if (alignment.missingKeys.length > 0) {
-                alignmentNotices += alignment.missingKeys.map(key => 
-                    `<div class="text-xs text-orange-300 mb-1">Not available: ${key}</div>`
-                ).join('');
-            }
-
-            // Inside/Outside Index calculation with proper null handling
-            const indexData = {
-                precip: current.precipitation ?? 0,
-                precipProb: hourly.precipitation_probability?.[0] ?? 0,
-                windSpeed: current.wind_speed_10m ?? 0,
-                gusts: current.wind_gusts_10m ?? 0,
-                temp: current.temperature_2m,
-                visibility: hourly.visibility?.[0] ?? 10000,
-                uvIndex: hourly.uv_index?.[0] ?? 0,
-                isDaylight: current.is_day === 1
-            };
-            
-            // Only compute index if we have essential data
-            let insideOutside;
-            if (indexData.temp !== null && indexData.temp !== undefined) {
-                insideOutside = utils.computeInsideOutsideIndex(indexData);
-            } else {
-                insideOutside = {
-                    recommendation: 'Insufficient data',
-                    color: 'text-gray-400',
-                    factors: ['Temperature data missing'],
-                    score: 0
-                };
-            }
-
-            // Marine risk assessment with proper null handling
-            const marineRisk = utils.computeMarineRisk(
-                this.marineData?.current?.wave_height ?? 0,
-                current.wind_speed_10m ?? 0,
-                current.wind_gusts_10m ?? 0,
-                hourly.visibility?.[0] ?? 10000
-            );
-
-            // Alerts with safe threshold access
-            const alerts = [];
             const thresholds = this.deps.state.settings?.widgets?.weather?.alertThresholds || {
                 rainProbHigh: 0.8,
                 gustStrongKmh: 50,
@@ -1382,33 +1196,45 @@ export const widgets = {
                 waveHighM: 2.5
             };
             
-            // Use exact API field names with proper null checking
-            const precipProb = hourly.precipitation_probability?.[0];
-            const windGusts = current.wind_gusts_10m;
-            const uvIndex = hourly.uv_index?.[0];
+            const commandData = this.dataAdapter.adaptCommandData(
+                this.weatherData,
+                this.marineData, 
+                units,
+                thresholds,
+                'Europe/London'
+            );
             
-            if (precipProb !== null && precipProb !== undefined && precipProb >= thresholds.rainProbHigh * 100) {
-                alerts.push({ icon: 'ph-cloud-rain', text: `${Math.round(precipProb)}% rain likely`, color: 'text-blue-400' });
+            if (commandData.error) {
+                contentEl.innerHTML = this.getErrorMessage(commandData.error);
+                return;
             }
-            if (windGusts !== null && windGusts !== undefined && windGusts >= thresholds.gustStrongKmh) {
-                alerts.push({ icon: 'ph-wind', text: `Strong gusts ${renderUtils.renderValue(windGusts, units === 'metric' ? ' km/h' : ' mph')}`, color: 'text-orange-400' });
+            
+            // Log data alignment for diagnostics
+            if (!commandData.alignment.valid && window.__WX_DIAG__?.isEnabled) {
+                console.warn('⚠️ Data alignment issues in command center:', commandData.alignment);
             }
-            if (uvIndex !== null && uvIndex !== undefined && uvIndex >= thresholds.uvHigh && current.is_day) {
-                alerts.push({ icon: 'ph-sun', text: `High UV ${Math.round(uvIndex)}`, color: 'text-yellow-400' });
+            
+            // Generate alignment notices
+            let alignmentNotices = '';
+            if (commandData.alignment.issues.length > 0) {
+                alignmentNotices = commandData.alignment.issues.map(issue => 
+                    `<div class="text-xs text-orange-300 mb-1">⚠️ ${issue}</div>`
+                ).join('');
             }
-
-            // Opportunities
-            const opportunities = [];
-            if (daily?.daylight_duration?.[0]) {
-                const daylightHours = Math.round(daily.daylight_duration[0] / 3600);
-                opportunities.push(`${daylightHours}h daylight today`);
+            if (commandData.alignment.missingKeys.length > 0) {
+                alignmentNotices += commandData.alignment.missingKeys.map(key => 
+                    `<div class="text-xs text-orange-300 mb-1">Not available: ${key}</div>`
+                ).join('');
             }
-            const cloudCover = current.cloud_cover;
+            
+            // Add opportunities for clear skies
+            const opportunities = [...commandData.opportunities];
+            const cloudCover = commandData.rawData.current.cloud_cover;
             if (cloudCover !== null && cloudCover !== undefined && cloudCover < 30) {
-                opportunities.push('clear skies');
+                opportunities.push({ icon: 'ph-sun-dim', text: 'clear skies' });
             }
-            if (marineRisk.maxLevel === 'Low') {
-                opportunities.push('calm seas');
+            if (commandData.marineRisk.maxLevel === 'Low') {
+                opportunities.push({ icon: 'ph-waves', text: 'calm seas' });
             }
 
             contentEl.innerHTML = `
@@ -1417,20 +1243,20 @@ export const widgets = {
                     <div class="p-4 bg-white bg-opacity-10 rounded-lg">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="font-medium text-gray-200">Outside Conditions</h4>
-                            <span class="text-lg font-bold ${insideOutside.color}">${insideOutside.recommendation}</span>
+                            <span class="text-lg font-bold ${commandData.insideOutside.color}">${commandData.insideOutside.recommendation}</span>
                         </div>
                         <div class="text-sm text-gray-300">
-                            ${insideOutside.factors.slice(0, 3).join(' • ')}
+                            ${commandData.insideOutside.factors.slice(0, 3).join(' • ')}
                         </div>
                     </div>
 
                     <!-- Alerts -->
-                    ${alerts.length > 0 ? `
+                    ${commandData.alerts.length > 0 ? `
                         <div class="space-y-2">
                             <h4 class="text-sm font-medium text-gray-300 flex items-center gap-2">
                                 <i class="ph ph-warning-circle"></i> Active Alerts
                             </h4>
-                            ${alerts.map(alert => `
+                            ${commandData.alerts.map(alert => `
                                 <div class="flex items-center gap-2 p-2 bg-red-500 bg-opacity-20 rounded">
                                     <i class="ph ${alert.icon} ${alert.color}"></i>
                                     <span class="text-sm">${alert.text}</span>
@@ -1439,30 +1265,20 @@ export const widgets = {
                         </div>
                     ` : ''}
 
-                    <!-- Marine Risk -->
+                    <!-- Marine Risk & Pressure -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg">
                             <div class="text-xs text-gray-400 mb-1">Marine Risk</div>
                             <div class="font-medium ${
-                                marineRisk.maxLevel === 'High' ? 'text-red-400' :
-                                marineRisk.maxLevel === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
-                            }">${marineRisk.maxLevel}</div>
-                            <div class="text-xs text-gray-300">${marineRisk.risks[0]?.type || 'Calm'}</div>
+                                commandData.marineRisk.maxLevel === 'High' ? 'text-red-400' :
+                                commandData.marineRisk.maxLevel === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
+                            }">${commandData.marineRisk.maxLevel}</div>
+                            <div class="text-xs text-gray-300">${commandData.marineRisk.risks[0]?.type || 'Calm'}</div>
                         </div>
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg">
-                            <div class="text-xs text-gray-400 mb-1">Pressure Trend</div>
-                            <div class="font-medium">${(() => {
-                                const pressureData = this.pickPressureSeries(hourly);
-                                return utils.computePressureTrend(pressureData.data.slice(0, 4) || []);
-                            })()}</div>
-                            <div class="text-xs text-gray-300">${(() => {
-                                const pressureData = this.pickPressureSeries(hourly);
-                                if (pressureData.key) {
-                                    const currentValue = current[pressureData.key] || pressureData.data[0];
-                                    return `${Math.round(currentValue || 0)} ${pressureData.unit}`;
-                                }
-                                return pressureData.label;
-                            })()}</div>
+                            <div class="text-xs text-gray-400 mb-1">Pressure</div>
+                            <div class="font-medium">${commandData.currentConditions.pressure}</div>
+                            <div class="text-xs text-gray-300">Current</div>
                         </div>
                     </div>
 
@@ -1473,7 +1289,7 @@ export const widgets = {
                                 <i class="ph ph-shooting-star text-green-400"></i>
                                 <span class="text-sm font-medium text-green-300">Today's highlights</span>
                             </div>
-                            <div class="text-sm text-gray-300">${opportunities.join(', ')}</div>
+                            <div class="text-sm text-gray-300">${opportunities.map(o => typeof o === 'string' ? o : o.text).join(', ')}</div>
                         </div>
                     ` : ''}
 
@@ -1489,43 +1305,22 @@ export const widgets = {
         },
 
         renderAtmosphere(contentEl) {
-            if (!this.weatherData?.current || !this.weatherData?.hourly) {
-                contentEl.innerHTML = this.getErrorMessage('Weather data unavailable');
+            // Get processed data from adapter
+            const units = this.getUnits();
+            const atmosphereData = this.dataAdapter.adaptAtmosphereData(
+                this.weatherData,
+                units,
+                'Europe/London'
+            );
+            
+            if (atmosphereData.error) {
+                contentEl.innerHTML = this.getErrorMessage(atmosphereData.error);
                 return;
             }
-
-            const current = this.weatherData.current;
-            const hourly = this.weatherData.hourly;
-            const units = this.getUnits();
-            const utils = this.deps.utils.weatherUtils;
-            const tempUnit = units === 'metric' ? '°C' : '°F';
-
-            // Verify data alignment for atmosphere fields
-            const atmosphereKeys = [
-                'temperature_2m', 'apparent_temperature', 'dew_point_2m', 
-                'relative_humidity_2m', 'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high'
-            ];
-            const alignment = this.verifyAlignment(hourly, atmosphereKeys);
             
-            if (!alignment.valid && window.__WX_DIAG__?.isEnabled) {
-                console.warn('⚠️ Data alignment issues in atmosphere:', alignment);
-            }
-
-            // Fog risk calculation
-            const fogRisk = utils.computeFogRisk(
-                current.temperature_2m,
-                hourly.dew_point_2m?.[0] || current.temperature_2m - 5,
-                current.cloud_cover || 0,
-                current.wind_speed_10m || 0,
-                hourly.visibility?.[0] || 10000
-            );
-
-            // Pressure trend using correct pressure series
-            const pressureData = this.pickPressureSeries(hourly);
-            const pressureTrend = utils.computePressureTrend(pressureData.data.slice(0, 4) || []);
-
-            // Cloud layer analysis
+            // Additional cloud layer analysis for display
             const cloudLayers = [];
+            const hourly = atmosphereData.rawData.hourly;
             if (hourly.cloud_cover_low?.[0] > 20) {
                 cloudLayers.push(`${Math.round(hourly.cloud_cover_low[0])}% low`);
             }
@@ -1542,12 +1337,12 @@ export const widgets = {
                     <div class="grid grid-cols-2 gap-3">
                         <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
                             <i class="ph ph-thermometer text-3xl text-red-400 mb-2"></i>
-                            <div class="text-2xl font-bold">${Math.round(current.temperature_2m)}${tempUnit}</div>
+                            <div class="text-2xl font-bold">${atmosphereData.temperature.current}</div>
                             <div class="text-sm text-gray-300">Current</div>
                         </div>
                         <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
                             <i class="ph ph-thermometer-simple text-3xl text-orange-400 mb-2"></i>
-                            <div class="text-2xl font-bold">${Math.round(current.apparent_temperature)}${tempUnit}</div>
+                            <div class="text-2xl font-bold">${atmosphereData.temperature.feelsLike}</div>
                             <div class="text-sm text-gray-300">Feels like</div>
                         </div>
                     </div>
@@ -1557,20 +1352,20 @@ export const widgets = {
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
                             <i class="ph ph-drop text-blue-400 text-lg mb-1"></i>
                             <div class="text-xs text-gray-400 mb-1">Humidity</div>
-                            <div class="font-medium">${current.relative_humidity_2m}%</div>
+                            <div class="font-medium">${atmosphereData.temperature.humidity}</div>
                         </div>
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
                             <i class="ph ph-drop-half text-blue-400 text-lg mb-1"></i>
                             <div class="text-xs text-gray-400 mb-1">Dew Point</div>
-                            <div class="font-medium">${Math.round(hourly.dew_point_2m?.[0] || current.temperature_2m - 5)}${tempUnit}</div>
+                            <div class="font-medium">${atmosphereData.temperature.dewPoint}</div>
                         </div>
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
                             <i class="ph ph-cloud-fog text-gray-400 text-lg mb-1"></i>
                             <div class="text-xs text-gray-400 mb-1">Fog Risk</div>
                             <div class="font-medium ${
-                                fogRisk === 'High' ? 'text-red-400' :
-                                fogRisk === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
-                            }">${fogRisk}</div>
+                                atmosphereData.visibility.fogRisk === 'High' ? 'text-red-400' :
+                                atmosphereData.visibility.fogRisk === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
+                            }">${atmosphereData.visibility.fogRisk}</div>
                         </div>
                     </div>
 
@@ -1581,33 +1376,21 @@ export const widgets = {
                         </h4>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                ${(() => {
-                                    const pressureData = this.pickPressureSeries(hourly);
-                                    if (pressureData.key) {
-                                        const currentValue = current[pressureData.key] || pressureData.data[0];
-                                        return `
-                                            <div class="text-lg font-bold">${Math.round(currentValue || 0)} ${pressureData.unit}</div>
-                                            <div class="text-xs text-gray-400">${pressureData.label}</div>
-                                        `;
-                                    }
-                                    return `
-                                        <div class="text-lg text-orange-300">${pressureData.label}</div>
-                                        <div class="text-xs text-gray-400">Pressure data</div>
-                                    `;
-                                })()}
+                                <div class="text-lg font-bold">${atmosphereData.pressure.current}</div>
+                                <div class="text-xs text-gray-400">${atmosphereData.pressure.series.label}</div>
                             </div>
                             <div>
                                 <div class="text-lg font-bold ${
-                                    pressureTrend.includes('Falling') ? 'text-red-400' :
-                                    pressureTrend.includes('Rising') ? 'text-green-400' : 'text-yellow-400'
-                                }">${pressureTrend}</div>
+                                    atmosphereData.pressure.trend.includes('Falling') ? 'text-red-400' :
+                                    atmosphereData.pressure.trend.includes('Rising') ? 'text-green-400' : 'text-yellow-400'
+                                }">${atmosphereData.pressure.trend}</div>
                                 <div class="text-xs text-gray-400">3-hour trend</div>
                             </div>
                         </div>
                         ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
                             <div class="mt-3 text-xs text-gray-400 p-2 bg-blue-500 bg-opacity-10 rounded">
-                                💡 ${pressureTrend.includes('Falling') ? 'Falling pressure often brings unsettled weather' : 
-                                     pressureTrend.includes('Rising') ? 'Rising pressure typically means improving conditions' :
+                                💡 ${atmosphereData.pressure.trend.includes('Falling') ? 'Falling pressure often brings unsettled weather' : 
+                                     atmosphereData.pressure.trend.includes('Rising') ? 'Rising pressure typically means improving conditions' :
                                      'Steady pressure suggests stable weather'}
                             </div>
                         ` : ''}
@@ -1629,14 +1412,14 @@ export const widgets = {
                     ` : ''}
 
                     <!-- Visibility -->
-                    ${hourly.visibility?.[0] ? `
+                    ${atmosphereData.visibility.current.level !== 'Unknown' ? `
                         <div class="p-3 bg-white bg-opacity-5 rounded-lg">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <i class="ph ph-eye text-gray-400"></i>
                                     <span class="text-sm font-medium">Visibility</span>
                                 </div>
-                                <span class="font-medium">${utils.getVisibilityLevel(hourly.visibility[0]).description}</span>
+                                <span class="font-medium">${atmosphereData.visibility.current.description}</span>
                             </div>
                         </div>
                     ` : ''}
@@ -2019,10 +1802,10 @@ export const widgets = {
                                     </div>
                                     <div class="text-right">
                                         <div class="text-sm font-medium">
-                                            ${this.renderStateTriad(hourly, 'temperature_2m', { index: i, unit: tempUnit })}
+                                            ${weatherPresentation.renderStateTriad(hourly, 'temperature_2m', { index: i, unit: tempUnit })}
                                         </div>
                                         <div class="text-xs text-gray-400">
-                                            ${this.renderStateTriad(hourly, 'wind_speed_10m', { index: i, unit: units === 'metric' ? ' km/h' : ' mph' })}
+                                            ${weatherPresentation.renderStateTriad(hourly, 'wind_speed_10m', { index: i, unit: units === 'metric' ? ' km/h' : ' mph' })}
                                         </div>
                                     </div>
                                 </div>
@@ -2071,14 +1854,14 @@ export const widgets = {
                                 <div class="text-right">
                                     <div class="text-sm font-medium">
                                         <span class="text-gray-300">
-                                            ${this.renderStateTriad(daily, 'temperature_2m_min', { index: i, unit: '°' })}
+                                            ${weatherPresentation.renderStateTriad(daily, 'temperature_2m_min', { index: i, unit: '°' })}
                                         </span>
                                         <span class="ml-1">
-                                            ${this.renderStateTriad(daily, 'temperature_2m_max', { index: i, unit: tempUnit })}
+                                            ${weatherPresentation.renderStateTriad(daily, 'temperature_2m_max', { index: i, unit: tempUnit })}
                                         </span>
                                     </div>
                                     <div class="text-xs text-gray-400">
-                                        UV ${this.renderStateTriad(daily, 'uv_index_max', { index: i, unit: '' })}
+                                        UV ${weatherPresentation.renderStateTriad(daily, 'uv_index_max', { index: i, unit: '' })}
                                     </div>
                                 </div>
                             </div>
