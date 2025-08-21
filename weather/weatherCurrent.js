@@ -5,7 +5,7 @@ export const currentWeather = {
     id: 'current-weather',
     title: 'Current Weather — Aberdeen',
     icon: 'ph-clock',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 4,
     container: null,
     deps: null,

@@ -5,7 +5,7 @@ export const marineWeather = {
     id: 'marine-weather',
     title: 'Marine Weather — Aberdeen',
     icon: 'ph-anchor',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 8,
     container: null,
     deps: null,

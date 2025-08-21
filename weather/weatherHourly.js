@@ -5,7 +5,7 @@ export const hourlyWeather = {
     id: 'hourly-weather',
     title: 'Hourly Weather — Aberdeen',
     icon: 'ph-clock-countdown',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 5,
     container: null,
     deps: null,

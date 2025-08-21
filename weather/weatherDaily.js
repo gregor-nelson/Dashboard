@@ -5,7 +5,7 @@ export const dailyWeather = {
     id: 'daily-weather',
     title: 'Daily Weather — Aberdeen',
     icon: 'ph-calendar',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 6,
     container: null,
     deps: null,

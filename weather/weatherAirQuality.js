@@ -5,7 +5,7 @@ export const airQualityWeather = {
     id: 'air-quality-weather',
     title: 'Air Quality — Aberdeen',
     icon: 'ph-waves',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 7,
     container: null,
     deps: null,

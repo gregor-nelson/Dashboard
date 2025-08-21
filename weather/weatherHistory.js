@@ -5,7 +5,7 @@ export const historyWeather = {
     id: 'weather-history',
     title: 'Weather History — Aberdeen',
     icon: 'ph-clock-counter-clockwise',
-    size: 'col-span-1',
+    size: 'md:col-span-2',
     order: 9,
     container: null,
     deps: null,
