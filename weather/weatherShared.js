@@ -1,0 +1,20 @@
+export function createWeatherCard(title, icon) {
+    return `
+    <div class="weather-widget-card bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <i class="ph ${icon} text-2xl"></i>
+                <h3 class="text-xl font-semibold">${title}</h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="widget-refresh p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors">
+                    <i class="ph ph-arrows-clockwise text-lg"></i>
+                </button>
+            </div>
+        </div>
+        <div class="widget-content"></div>
+        <div class="text-xs text-gray-400 mt-4 text-center">
+            <a href="https://open-meteo.com/" target="_blank">Weather data by Open-Meteo</a>
+        </div>
+    </div>`;
+}

@@ -6,7 +6,7 @@ const state = {
     settings: {
         utcMode: false,
         darkTheme: false,
-        enabledWidgets: ['quote', 'finance', 'weather', 'calendar'],
+        enabledWidgets: ['quote', 'finance', 'advanced-weather', 'current-weather', 'hourly-weather', 'daily-weather', 'air-quality-weather', 'marine-weather', 'weather-history', 'calendar'],
         widgets: {
             weather: {
                 units: 'metric', // metric or imperial
@@ -43,6 +43,11 @@ const state = {
     },
     quotes: [],
     currentQuote: null,
+    weatherData: null,
+    airQualityData: null,
+    marineData: null,
+    historyData: null,
+    nowcastData: null,
     services: {}
 };
 
@@ -726,7 +731,8 @@ function renderSettings() {
     
     // Show/hide weather settings based on weather widget being enabled
     const weatherSection = document.getElementById('weather-settings-section');
-    const isWeatherEnabled = state.settings.enabledWidgets.includes('weather');
+    const weatherWidgetIds = ['advanced-weather','current-weather','hourly-weather','daily-weather','air-quality-weather','marine-weather','weather-history'];
+    const isWeatherEnabled = weatherWidgetIds.some(id => state.settings.enabledWidgets.includes(id));
     weatherSection.style.display = isWeatherEnabled ? 'block' : 'none';
     
     if (isWeatherEnabled) {
@@ -827,8 +833,10 @@ function setupEventListeners() {
             
             // Show/hide weather settings when weather widget is toggled
             const weatherSection = document.getElementById('weather-settings-section');
-            if (widgetId === 'weather') {
-                weatherSection.style.display = isEnabled ? 'block' : 'none';
+            const weatherWidgetIds = ['advanced-weather','current-weather','hourly-weather','daily-weather','air-quality-weather','marine-weather','weather-history'];
+            if (weatherWidgetIds.includes(widgetId)) {
+                const anyEnabled = weatherWidgetIds.some(id => state.settings.enabledWidgets.includes(id));
+                weatherSection.style.display = anyEnabled ? 'block' : 'none';
             }
             
             saveSettings();
