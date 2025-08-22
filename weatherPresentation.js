@@ -68,17 +68,17 @@ export const weatherPresentation = {
         } = options;
 
         if (!data || !Array.isArray(data[key])) {
-            return `<span class="text-gray-400">${fallback}</span>`;
+            return `<span class="text-neutral-500 dark:text-neutral-400">${fallback}</span>`;
         }
 
         const value = data[key][index];
         
         if (value === null || value === undefined) {
-            return `<span class="text-gray-400">${fallback}</span>`;
+            return `<span class="text-neutral-500 dark:text-neutral-400">${fallback}</span>`;
         }
 
         if (value === 0 && !showZero) {
-            return `<span class="text-gray-500">0${unit}</span>`;
+            return `<span class="text-neutral-500 dark:text-neutral-400">0${unit}</span>`;
         }
 
         const formatted = this.formatWithUnits(value, unit, { precision, prefix, suffix });
@@ -88,12 +88,12 @@ export const weatherPresentation = {
     // Safe array value rendering
     renderArrayValue(array, index, unit = '', fallback = '—') {
         if (!Array.isArray(array) || index >= array.length || index < 0) {
-            return `<span class="text-gray-400">${fallback}</span>`;
+            return `<span class="text-neutral-500 dark:text-neutral-400">${fallback}</span>`;
         }
         
         const value = array[index];
         if (value === null || value === undefined) {
-            return `<span class="text-gray-400">${fallback}</span>`;
+            return `<span class="text-neutral-500 dark:text-neutral-400">${fallback}</span>`;
         }
         
         return `<span>${this.formatWithUnits(value, unit)}</span>`;
@@ -103,9 +103,9 @@ export const weatherPresentation = {
     renderChart(data, minPoints = 2, fallbackValue = null, fallbackUnit = '') {
         if (!Array.isArray(data) || data.length < minPoints) {
             if (fallbackValue !== null) {
-                return `<div class="text-center py-4 text-gray-400">${this.formatWithUnits(fallbackValue, fallbackUnit)}</div>`;
+                return `<div class="text-center py-4 text-neutral-500 dark:text-neutral-400">${this.formatWithUnits(fallbackValue, fallbackUnit)}</div>`;
             }
-            return `<div class="text-center py-4 text-gray-400">Insufficient data</div>`;
+            return `<div class="text-center py-4 text-neutral-500 dark:text-neutral-400">Insufficient data</div>`;
         }
         
         // Return data for chart rendering
@@ -116,7 +116,7 @@ export const weatherPresentation = {
     renderLoadingSkeleton(height = 'h-16') {
         return `
             <div class="animate-pulse">
-                <div class="bg-gray-600 bg-opacity-30 rounded ${height}"></div>
+                <div class="bg-neutral-300 dark:bg-neutral-600 bg-opacity-30 rounded ${height}"></div>
             </div>
         `;
     },
@@ -124,7 +124,7 @@ export const weatherPresentation = {
     // Not available message
     renderNotAvailable(message = 'Not available', icon = 'ph-warning') {
         return `
-            <div class="text-center py-8 text-gray-400">
+            <div class="text-center py-8 text-neutral-500 dark:text-neutral-400">
                 <i class="ph ${icon} text-2xl mb-2"></i>
                 <p>${message}</p>
             </div>
@@ -134,7 +134,7 @@ export const weatherPresentation = {
     // No data in range message
     renderNoDataInRange(message = 'No data in range') {
         return `
-            <div class="text-center py-4 text-gray-400">
+            <div class="text-center py-4 text-neutral-500 dark:text-neutral-400">
                 <i class="ph ph-calendar-x text-xl mb-1"></i>
                 <p class="text-sm">${message}</p>
             </div>

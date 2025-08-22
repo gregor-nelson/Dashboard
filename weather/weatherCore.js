@@ -4,7 +4,7 @@ import { WeatherDataAdapter } from "../weatherDataAdapter.js";
 
 export const advancedWeather = {
         id: 'advanced-weather',
-        title: 'Advanced Weather — Aberdeen',
+        title: 'Advanced Weather',
         icon: 'ph-cloud-sun',
         size: 'md:col-span-2',
         order: 3,
@@ -31,39 +31,39 @@ export const advancedWeather = {
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <i class="ph ph-cloud-sun text-2xl"></i>
-                            <h3 class="text-lg font-semibold">Weather — Aberdeen</h3>
+                            <h3 class="text-lg font-semibold">Weather</h3>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button id="weather-units" class="px-2 py-1 text-xs rounded hover:bg-white hover:bg-opacity-10 transition-colors">
+                            <button id="weather-units" class="p-2 hover:bg-neutral-100  dark:hover:bg-neutral-600 rounded-lg transition-colors">
                                 ${this.getUnitsLabel()}
                             </button>
-                            <button id="weather-refresh" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Refresh">
+                            <button id="weather-refresh" class="p-2 hover:bg-neutral-100  dark:hover:bg-neutral-600 rounded-lg transition-colors" title="Refresh">
                                 <i class="ph ph-arrows-clockwise text-lg"></i>
                             </button>
                             <div class="relative">
-                                <button id="weather-settings" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" 
+                                <button id="weather-settings" class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded-lg transition-colors" 
                                         title="Weather Settings" aria-haspopup="menu" aria-expanded="false">
                                     <i class="ph ph-gear text-lg"></i>
                                 </button>
                                 <!-- Settings Popover -->
-                                <div id="weather-settings-popover" class="absolute right-0 top-8 z-[100] w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-4 hidden" role="menu">
+                                <div id="weather-settings-popover" class="absolute right-0 top-8 z-[100] w-80 bg-white dark:bg-neutral-700 rounded-lg shadow-xl border border-neutral-300 dark:border-neutral-600 p-4 hidden" role="menu">
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <h4 class="text-sm font-medium text-white">Weather Settings</h4>
-                                            <button id="close-weather-settings" class="text-gray-400 hover:text-white" aria-label="Close settings">
+                                            <h4 class="text-sm font-medium text-neutral-800 dark:text-neutral-100">Weather Settings</h4>
+                                            <button id="close-weather-settings" class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-100 dark:text-neutral-100" aria-label="Close settings">
                                                 <i class="ph ph-x text-sm"></i>
                                             </button>
                                         </div>
                                         
                                         <!-- Units -->
                                         <div class="space-y-2">
-                                            <label class="text-xs font-medium text-gray-300">Units</label>
+                                            <label class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Units</label>
                                             <div class="flex gap-2">
-                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-gray-600 transition-colors" 
+                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors" 
                                                         data-units="metric" role="menuitemradio">
                                                     Metric (°C, km/h)
                                                 </button>
-                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-gray-600 transition-colors" 
+                                                <button class="weather-unit-toggle flex-1 px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors" 
                                                         data-units="imperial" role="menuitemradio">
                                                     Imperial (°F, mph)
                                                 </button>
@@ -72,19 +72,19 @@ export const advancedWeather = {
                                         
                                         <!-- Auto Refresh -->
                                         <div class="flex items-center justify-between">
-                                            <label class="text-xs font-medium text-gray-300">Auto Refresh</label>
+                                            <label class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Auto Refresh</label>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" id="weather-auto-refresh-toggle" class="sr-only peer">
-                                                <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                                <div class="w-9 h-5 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                             </label>
                                         </div>
                                         
                                         <!-- Refresh Interval -->
                                         <div id="refresh-interval-setting" class="space-y-2">
-                                            <label class="text-xs font-medium text-gray-300">Refresh Interval (minutes)</label>
+                                            <label class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Refresh Interval (minutes)</label>
                                             <input type="range" id="weather-refresh-interval-slider" min="5" max="60" step="5" 
-                                                   class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                                            <div class="flex justify-between text-xs text-gray-400">
+                                                   class="w-full h-2 bg-neutral-300 dark:bg-neutral-600 rounded-lg appearance-none cursor-pointer">
+                                            <div class="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                                                 <span>5</span>
                                                 <span id="refresh-interval-display">15</span>
                                                 <span>60</span>
@@ -93,7 +93,7 @@ export const advancedWeather = {
                                         
                                         <!-- Section Visibility -->
                                         <div class="space-y-2">
-                                            <label class="text-xs font-medium text-gray-300">Enabled Sections</label>
+                                            <label class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Enabled Sections</label>
                                             <div class="grid grid-cols-2 gap-2 text-xs">
                                                 <label class="flex items-center gap-2">
                                                     <input type="checkbox" class="section-toggle" data-section="command" checked>
@@ -124,10 +124,10 @@ export const advancedWeather = {
                                         
                                         <!-- Educational Tips -->
                                         <div class="flex items-center justify-between">
-                                            <label class="text-xs font-medium text-gray-300">Educational Tips</label>
+                                            <label class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Educational Tips</label>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" id="weather-tips-toggle" class="sr-only peer" checked>
-                                                <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                                <div class="w-9 h-5 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                             </label>
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@ export const advancedWeather = {
                     </div>
                     
                     <div class="weather-tabs mb-4">
-                        <nav class="grid grid-cols-7 gap-1 bg-white bg-opacity-10 rounded-lg p-1">
+                        <nav class="grid grid-cols-7 gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
                             <button class="weather-tab-btn py-2 px-2 text-xs font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300" data-tab="command" title="Command Center">
                                 <i class="ph ph-flag text-lg mb-1"></i>
                                 <div>Cmd</div>
@@ -170,14 +170,14 @@ export const advancedWeather = {
                     </div>
                     
                     <div id="weather-content" class="weather-content min-h-[300px]">
-                        <div class="text-center text-gray-300 py-12">
+                        <div class="text-center text-neutral-500 dark:text-neutral-400 py-12">
                             <i class="ph ph-spinner text-3xl animate-spin mb-3"></i>
                             <p>Loading weather data...</p>
                         </div>
                     </div>
                     
-                    <div class="text-xs text-gray-400 mt-4 text-center">
-                        <a href="https://open-meteo.com/" target="_blank" class="hover:text-gray-300">Weather data by Open-Meteo</a>
+                    <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-4 text-center">
+                        <a href="https://open-meteo.com/" target="_blank" class="hover:text-neutral-500 dark:text-neutral-400">Weather data by Open-Meteo</a>
                     </div>
                 </div>
             `;
@@ -347,12 +347,12 @@ export const advancedWeather = {
             const currentUnits = this.getUnits();
             this.container.querySelectorAll('.weather-unit-toggle').forEach(btn => {
                 if (btn.dataset.units === currentUnits) {
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    btn.classList.remove('text-gray-300');
+                    btn.classList.add('bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-100');
+                    btn.classList.remove('text-neutral-500', 'dark:text-neutral-400');
                     btn.setAttribute('aria-checked', 'true');
                 } else {
-                    btn.classList.remove('bg-blue-600', 'text-white');
-                    btn.classList.add('text-gray-300');
+                    btn.classList.remove('bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-100');
+                    btn.classList.add('text-neutral-500', 'dark:text-neutral-400');
                     btn.setAttribute('aria-checked', 'false');
                 }
             });
@@ -415,12 +415,12 @@ export const advancedWeather = {
 
         // Phase 5: Utility Functions
         getNowIndexForSeries(timesISO, nowLocalISO, stepMinutes) {
-            const now = new Date(nowLocalISO);
+            const now = new Date(nowLocalISO); // Parse as local timezone
             const flooredMinutes = Math.floor(now.getMinutes() / stepMinutes) * stepMinutes;
             const flooredNow = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), flooredMinutes);
             
             for (let i = 0; i < timesISO.length; i++) {
-                const seriesTime = new Date(timesISO[i]);
+                const seriesTime = new Date(timesISO[i]); // Parse API times naturally
                 if (seriesTime >= flooredNow) {
                     return i;
                 }
@@ -428,49 +428,48 @@ export const advancedWeather = {
             return -1;
         },
 
+        // Helper function to get current hour index
+        getCurrentHourIndex(hourlyTime, timezone = 'Europe/London') {
+            if (!hourlyTime || !hourlyTime.length) return 0;
+            const nowUTC = new Date();
+            const nowLocalISO = nowUTC.toLocaleString('sv-SE', { timeZone: timezone }).slice(0, 19);
+            const index = this.getNowIndexForSeries(hourlyTime, nowLocalISO, 60);
+            return index >= 0 ? index : 0;
+        },
+
         renderNext2HoursMinutely(minutely, timezone = 'Europe/London') {
+            
             if (!minutely || !minutely.time) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                        <i class="ph ph-warning text-orange-400 text-xl mb-2"></i>
-                        <div class="text-sm text-orange-300">Not available (15-min data)</div>
-                        <div class="text-xs text-gray-400 mt-1">15-minute forecasts not supported for this region</div>
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                        <i class="ph ph-warning text-orange-600 dark:text-orange-400 text-xl mb-2"></i>
+                        <div class="text-sm text-orange-600 dark:text-orange-400">Not available (15-min data)</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">15-minute forecasts not supported for this region</div>
                     </div>
                 `;
             }
 
             if (!minutely.time.length || minutely.time.length === 0) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                        <i class="ph ph-chart-line-down text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">15-minute data unavailable</div>
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                        <i class="ph ph-chart-line-down text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">15-minute data unavailable</div>
                     </div>
                 `;
             }
 
-            // Check for required keys
-            const requiredKeys = ['precipitation', 'rain', 'snowfall', 'weather_code'];
-            const availableKeys = requiredKeys.filter(key => minutely[key]);
-            if (availableKeys.length === 0) {
-                return `
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                        <i class="ph ph-warning text-orange-400 text-xl mb-2"></i>
-                        <div class="text-sm text-orange-300">Not available (15-min data)</div>
-                        <div class="text-xs text-gray-400 mt-1">Required forecast variables missing</div>
-                    </div>
-                `;
-            }
 
-            const nowLocalISO = new Date().toLocaleString('sv-SE', { timeZone: timezone });
+            const nowUTC = new Date();
+            const nowLocalISO = nowUTC.toLocaleString('sv-SE', { timeZone: timezone }).slice(0, 19); // Get local time in timezone
             const nowIndex = this.getNowIndexForSeries(minutely.time, nowLocalISO, 15);
             
             if (nowIndex === -1) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                        <i class="ph ph-clock-countdown text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">Current time not found in forecast range</div>
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                        <i class="ph ph-clock-countdown text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Current time not found in forecast range</div>
                     </div>
                 `;
             }
@@ -480,17 +479,17 @@ export const advancedWeather = {
             
             if (sliceLength < 2) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                        <i class="ph ph-chart-line-down text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">Less than 2 forecast points available</div>
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                        <i class="ph ph-chart-line-down text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Less than 2 forecast points available</div>
                     </div>
                 `;
             }
 
             return `
-                <div class="p-4 bg-white bg-opacity-10 rounded-lg">
-                    <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                    <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                         <i class="ph ph-clock"></i> Next 2 Hours (15-min intervals)
                     </h4>
                     <div class="grid grid-cols-8 gap-1 text-xs">
@@ -503,22 +502,25 @@ export const advancedWeather = {
                             const weatherCode = minutely.weather_code?.[actualIndex] || 0;
                             const weatherInfo = this.deps.utils.weatherUtils.getWeatherInfo(weatherCode);
                             
-                            let precipDisplay = '—';
-                            let colorClass = 'text-gray-400';
+                            
+                            let precipDisplay = '0.0mm';
+                            let colorClass = 'text-neutral-500 dark:text-neutral-400';
                             
                             if (Number.isFinite(rain) && rain > 0) {
                                 precipDisplay = rain.toFixed(1) + 'mm';
-                                colorClass = 'text-blue-400';
+                                colorClass = 'text-blue-600 dark:text-blue-400';
                             } else if (Number.isFinite(snow) && snow > 0) {
                                 precipDisplay = (snow * 10).toFixed(1) + 'mm';
-                                colorClass = 'text-blue-200';
+                                colorClass = 'text-blue-600 dark:text-blue-400';
                             } else if (Number.isFinite(minutely.precipitation?.[actualIndex]) && minutely.precipitation[actualIndex] > 0) {
                                 precipDisplay = minutely.precipitation[actualIndex].toFixed(1) + 'mm';
-                                colorClass = 'text-blue-400';
+                                colorClass = 'text-blue-600 dark:text-blue-400';
+                            } else if (Number.isFinite(rain) || Number.isFinite(snow) || Number.isFinite(minutely.precipitation?.[actualIndex])) {
+                                precipDisplay = '0.0mm';
                             }
                             
                             return `
-                                <div class="p-2 bg-white bg-opacity-5 rounded text-center">
+                                <div class="p-2 bg-neutral-50 dark:bg-neutral-700 rounded text-center">
                                     <div class="font-medium">${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}</div>
                                     <i class="ph ${weatherInfo.icon} text-sm ${colorClass} my-1"></i>
                                     <div class="text-xs ${colorClass}">
@@ -535,30 +537,30 @@ export const advancedWeather = {
         renderHourlyRainProbNext12h(hourly, timezone = 'Europe/London') {
             if (!hourly || !hourly.time) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-warning text-orange-400 text-xl mb-2"></i>
-                        <div class="text-sm text-orange-300">Not available</div>
-                        <div class="text-xs text-gray-400 mt-1">Hourly data missing</div>
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg text-center">
+                        <i class="ph ph-warning text-orange-600 dark:text-orange-400 text-xl mb-2"></i>
+                        <div class="text-sm text-orange-600 dark:text-orange-400">Not available</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Hourly data missing</div>
                     </div>
                 `;
             }
 
             if (!hourly.precipitation_probability) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-warning text-orange-400 text-xl mb-2"></i>
-                        <div class="text-sm text-orange-300">Not available</div>
-                        <div class="text-xs text-gray-400 mt-1">Rain probability data missing</div>
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg text-center">
+                        <i class="ph ph-warning text-orange-600 dark:text-orange-400 text-xl mb-2"></i>
+                        <div class="text-sm text-orange-600 dark:text-orange-400">Not available</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Rain probability data missing</div>
                     </div>
                 `;
             }
 
             if (!hourly.time.length || hourly.time.length === 0) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-chart-line-down text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">Hourly forecast unavailable</div>
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg text-center">
+                        <i class="ph ph-chart-line-down text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Hourly forecast unavailable</div>
                     </div>
                 `;
             }
@@ -568,10 +570,10 @@ export const advancedWeather = {
             
             if (nowHourIndex === -1) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-clock-countdown text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">Current time not found in forecast range</div>
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg text-center">
+                        <i class="ph ph-clock-countdown text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Current time not found in forecast range</div>
                     </div>
                 `;
             }
@@ -581,17 +583,17 @@ export const advancedWeather = {
             
             if (sliceLength < 2) {
                 return `
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-chart-line-down text-gray-400 text-xl mb-2"></i>
-                        <div class="text-sm text-gray-400">No data in range</div>
-                        <div class="text-xs text-gray-400 mt-1">Less than 2 forecast points available</div>
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg text-center">
+                        <i class="ph ph-chart-line-down text-neutral-500 dark:text-neutral-400 text-xl mb-2"></i>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">No data in range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Less than 2 forecast points available</div>
                     </div>
                 `;
             }
 
             return `
-                <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                    <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                    <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                         <i class="ph ph-percent"></i> Hourly Rain Probability (Next 12h)
                     </h4>
                     <div class="space-y-2">
@@ -611,8 +613,8 @@ export const advancedWeather = {
                                         ${time.getHours().toString().padStart(2, '0')}:00
                                     </div>
                                     <div class="flex-1 mx-3">
-                                        <div class="h-2 bg-gray-600 rounded-full overflow-hidden">
-                                            <div class="h-full bg-blue-400 rounded-full" style="width: ${Number.isFinite(precipProb) ? Math.min(precipProb, 100) : 0}%"></div>
+                                        <div class="h-2 bg-neutral-300 dark:bg-neutral-600 rounded-full overflow-hidden">
+                                            <div class="h-full bg-blue-500 dark:bg-blue-400 rounded-full" style="width: ${Number.isFinite(precipProb) ? Math.min(precipProb, 100) : 0}%"></div>
                                         </div>
                                     </div>
                                     <div class="text-sm w-12 text-right">
@@ -630,20 +632,20 @@ export const advancedWeather = {
             if (!hourly || !hourly.time) {
                 return `
                     <div class="grid grid-cols-3 gap-3 text-sm">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-cloud-rain text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Rain (1h)</div>
-                            <div class="text-sm text-orange-300">Not available</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-cloud-rain text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Rain (1h)</div>
+                            <div class="text-sm text-orange-600 dark:text-orange-400">Not available</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-cloud-drizzle text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Showers (1h)</div>
-                            <div class="text-sm text-orange-300">Not available</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-cloud-drizzle text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Showers (1h)</div>
+                            <div class="text-sm text-orange-600 dark:text-orange-400">Not available</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-cloud-snow text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Snow (1h)</div>
-                            <div class="text-sm text-orange-300">Not available</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-cloud-snow text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Snow (1h)</div>
+                            <div class="text-sm text-orange-600 dark:text-orange-400">Not available</div>
                         </div>
                     </div>
                 `;
@@ -665,23 +667,23 @@ export const advancedWeather = {
 
             return `
                 <div class="grid grid-cols-3 gap-3 text-sm">
-                    <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-cloud-rain text-blue-400 text-lg mb-1"></i>
-                        <div class="text-xs text-gray-400 mb-1">Rain (1h)</div>
+                    <div class="p-3 text-center">
+                        <i class="ph ph-cloud-rain text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Rain (1h)</div>
                         <div class="font-medium">
                             ${rainValue == null ? '—' : Number.isFinite(rainValue) ? rainValue.toFixed(1) + 'mm' : '—'}
                         </div>
                     </div>
-                    <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-cloud-drizzle text-gray-400 text-lg mb-1"></i>
-                        <div class="text-xs text-gray-400 mb-1">Showers (1h)</div>
+                    <div class="p-3 text-center">
+                        <i class="ph ph-cloud-drizzle text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Showers (1h)</div>
                         <div class="font-medium">
                             ${showersValue == null ? '—' : Number.isFinite(showersValue) ? showersValue.toFixed(1) + 'mm' : '—'}
                         </div>
                     </div>
-                    <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                        <i class="ph ph-cloud-snow text-blue-200 text-lg mb-1"></i>
-                        <div class="text-xs text-gray-400 mb-1">Snow (1h)</div>
+                    <div class="p-3 text-center">
+                        <i class="ph ph-cloud-snow text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Snow (1h)</div>
                         <div class="font-medium">
                             ${snowValue == null ? '—' : Number.isFinite(snowValue) ? snowValue.toFixed(1) + 'cm' : '—'}
                         </div>
@@ -696,17 +698,17 @@ export const advancedWeather = {
             if (!Array.isArray(data) || data.length < minPoints) {
                 if (fallbackValue !== null && typeof fallbackValue === 'number') {
                     return `
-                        <div class="flex items-center justify-center h-16 bg-white bg-opacity-5 rounded-lg">
+                        <div class="flex items-center justify-center h-16 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
                             <div class="text-center">
                                 <div class="text-lg font-bold">${fallbackValue}${fallbackUnit}</div>
-                                <div class="text-xs text-gray-400">Insufficient data for chart</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400">Insufficient data for chart</div>
                             </div>
                         </div>
                     `;
                 }
                 return `
-                    <div class="flex items-center justify-center h-16 bg-white bg-opacity-5 rounded-lg">
-                        <div class="text-center text-gray-400">
+                    <div class="flex items-center justify-center h-16 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <div class="text-center text-neutral-500 dark:text-neutral-400">
                             <i class="ph ph-chart-line text-xl mb-1"></i>
                             <div class="text-xs">Insufficient data points</div>
                         </div>
@@ -721,14 +723,14 @@ export const advancedWeather = {
         renderLoadingSkeleton(height = 'h-16') {
             return `
                 <div class="animate-pulse">
-                    <div class="${height} bg-gray-600 rounded-lg"></div>
+                    <div class="${height} bg-neutral-300 dark:bg-neutral-600 rounded-lg"></div>
                 </div>
             `;
         },
 
         renderNotAvailable(message = 'Not available', icon = 'ph-warning') {
             return `
-                <div class="flex items-center justify-center h-16 text-center text-orange-300">
+                <div class="flex items-center justify-center h-16 text-center text-orange-600 dark:text-orange-400">
                     <div>
                         <i class="ph ${icon} text-xl mb-1"></i>
                         <div class="text-sm">${message}</div>
@@ -739,7 +741,7 @@ export const advancedWeather = {
 
         renderNoDataInRange(message = 'No data in range') {
             return `
-                <div class="flex items-center justify-center h-16 text-center text-gray-400">
+                <div class="flex items-center justify-center h-16 text-center text-neutral-500 dark:text-neutral-400">
                     <div>
                         <i class="ph ph-database text-xl mb-1"></i>
                         <div class="text-sm">${message}</div>
@@ -821,11 +823,11 @@ export const advancedWeather = {
         updateTabButtons() {
             this.container?.querySelectorAll('.weather-tab-btn').forEach(btn => {
                 if (btn.dataset.tab === this.currentTab) {
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    btn.classList.remove('text-gray-300', 'hover:text-white');
+                    btn.classList.add('bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-100');
+                    btn.classList.remove('text-neutral-500', 'dark:text-neutral-400', 'hover:text-neutral-800', 'dark:hover:text-neutral-100');
                 } else {
-                    btn.classList.remove('bg-blue-600', 'text-white');
-                    btn.classList.add('text-gray-300', 'hover:text-white');
+                    btn.classList.remove('bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-100');
+                    btn.classList.add('text-neutral-500', 'dark:text-neutral-400', 'hover:text-neutral-800', 'dark:hover:text-neutral-100');
                 }
             });
         },
@@ -985,12 +987,12 @@ export const advancedWeather = {
             let alignmentNotices = '';
             if (commandData.alignment.issues.length > 0) {
                 alignmentNotices = commandData.alignment.issues.map(issue => 
-                    `<div class="text-xs text-orange-300 mb-1">⚠️ ${issue}</div>`
+                    `<div class="text-xs text-orange-600 dark:text-orange-400 mb-1">⚠️ ${issue}</div>`
                 ).join('');
             }
             if (commandData.alignment.missingKeys.length > 0) {
                 alignmentNotices += commandData.alignment.missingKeys.map(key => 
-                    `<div class="text-xs text-orange-300 mb-1">Not available: ${key}</div>`
+                    `<div class="text-xs text-orange-600 dark:text-orange-400 mb-1">Not available: ${key}</div>`
                 ).join('');
             }
             
@@ -1007,12 +1009,12 @@ export const advancedWeather = {
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <!-- Inside/Outside Index -->
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg">
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-medium text-gray-200">Outside Conditions</h4>
+                            <h4 class="font-medium text-gray-200 dark:text-gray-100">Outside Conditions</h4>
                             <span class="text-lg font-bold ${commandData.insideOutside.color}">${commandData.insideOutside.recommendation}</span>
                         </div>
-                        <div class="text-sm text-gray-300">
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">
                             ${commandData.insideOutside.factors.slice(0, 3).join(' • ')}
                         </div>
                     </div>
@@ -1020,11 +1022,11 @@ export const advancedWeather = {
                     <!-- Alerts -->
                     ${commandData.alerts.length > 0 ? `
                         <div class="space-y-2">
-                            <h4 class="text-sm font-medium text-gray-300 flex items-center gap-2">
+                            <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
                                 <i class="ph ph-warning-circle"></i> Active Alerts
                             </h4>
                             ${commandData.alerts.map(alert => `
-                                <div class="flex items-center gap-2 p-2 bg-red-500 bg-opacity-20 rounded">
+                                <div class="flex items-center gap-2 p-2 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded">
                                     <i class="ph ${alert.icon} ${alert.color}"></i>
                                     <span class="text-sm">${alert.text}</span>
                                 </div>
@@ -1034,36 +1036,36 @@ export const advancedWeather = {
 
                     <!-- Marine Risk & Pressure -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg">
-                            <div class="text-xs text-gray-400 mb-1">Marine Risk</div>
+                        <div class="p-3">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Marine Risk</div>
                             <div class="font-medium ${
-                                commandData.marineRisk.maxLevel === 'High' ? 'text-red-400' :
-                                commandData.marineRisk.maxLevel === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
+                                commandData.marineRisk.maxLevel === 'High' ? 'text-red-400 dark:text-red-400' :
+                                commandData.marineRisk.maxLevel === 'Moderate' ? 'text-yellow-400 dark:text-yellow-400' : 'text-green-400 dark:text-green-400'
                             }">${commandData.marineRisk.maxLevel}</div>
-                            <div class="text-xs text-gray-300">${commandData.marineRisk.risks[0]?.type || 'Calm'}</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">${commandData.marineRisk.risks[0]?.type || 'Calm'}</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg">
-                            <div class="text-xs text-gray-400 mb-1">Pressure</div>
+                        <div class="p-3">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Pressure</div>
                             <div class="font-medium">${commandData.currentConditions.pressure}</div>
-                            <div class="text-xs text-gray-300">Current</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">Current</div>
                         </div>
                     </div>
 
                     <!-- Opportunities -->
                     ${opportunities.length > 0 ? `
-                        <div class="p-3 bg-green-500 bg-opacity-10 rounded-lg">
+                        <div class="p-3 bg-green-500 dark:bg-green-900 bg-opacity-10 rounded-lg">
                             <div class="flex items-center gap-2 mb-1">
-                                <i class="ph ph-shooting-star text-green-400"></i>
-                                <span class="text-sm font-medium text-green-300">Today's highlights</span>
+                                <i class="ph ph-shooting-star text-green-400 dark:text-green-300"></i>
+                                <span class="text-sm font-medium text-green-300 dark:text-green-400">Today's highlights</span>
                             </div>
-                            <div class="text-sm text-gray-300">${opportunities.map(o => typeof o === 'string' ? o : o.text).join(', ')}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">${opportunities.map(o => typeof o === 'string' ? o : o.text).join(', ')}</div>
                         </div>
                     ` : ''}
 
                     <!-- Data Alignment Notices -->
                     ${alignmentNotices ? `
-                        <div class="p-3 bg-yellow-500 bg-opacity-10 rounded-lg">
-                            <div class="text-xs text-yellow-300 font-medium mb-1">Data Quality Notices:</div>
+                        <div class="p-3 bg-yellow-500 dark:bg-yellow-900 bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-yellow-300 dark:text-yellow-400 font-medium mb-1">Data Quality Notices:</div>
                             ${alignmentNotices}
                         </div>
                     ` : ''}
@@ -1088,74 +1090,75 @@ export const advancedWeather = {
             // Additional cloud layer analysis for display
             const cloudLayers = [];
             const hourly = atmosphereData.rawData.hourly;
-            if (hourly.cloud_cover_low?.[0] > 20) {
-                cloudLayers.push(`${Math.round(hourly.cloud_cover_low[0])}% low`);
+            const currentHourIndex = this.getCurrentHourIndex(hourly.time);
+            if (hourly.cloud_cover_low?.[currentHourIndex] > 20) {
+                cloudLayers.push(`${Math.round(hourly.cloud_cover_low[currentHourIndex])}% low`);
             }
-            if (hourly.cloud_cover_mid?.[0] > 20) {
-                cloudLayers.push(`${Math.round(hourly.cloud_cover_mid[0])}% mid`);
+            if (hourly.cloud_cover_mid?.[currentHourIndex] > 20) {
+                cloudLayers.push(`${Math.round(hourly.cloud_cover_mid[currentHourIndex])}% mid`);
             }
-            if (hourly.cloud_cover_high?.[0] > 20) {
-                cloudLayers.push(`${Math.round(hourly.cloud_cover_high[0])}% high`);
+            if (hourly.cloud_cover_high?.[currentHourIndex] > 20) {
+                cloudLayers.push(`${Math.round(hourly.cloud_cover_high[currentHourIndex])}% high`);
             }
 
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <!-- Temperature & Comfort -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-thermometer text-3xl text-red-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-thermometer text-3xl text-red-400 dark:text-red-400 mb-2"></i>
                             <div class="text-2xl font-bold">${atmosphereData.temperature.current}</div>
-                            <div class="text-sm text-gray-300">Current</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">Current</div>
                         </div>
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-thermometer-simple text-3xl text-orange-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-thermometer-simple text-3xl text-orange-600 dark:text-orange-400 mb-2"></i>
                             <div class="text-2xl font-bold">${atmosphereData.temperature.feelsLike}</div>
-                            <div class="text-sm text-gray-300">Feels like</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">Feels like</div>
                         </div>
                     </div>
 
                     <!-- Humidity & Dew Point -->
                     <div class="grid grid-cols-3 gap-3 text-sm">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-drop text-blue-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Humidity</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-drop text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Humidity</div>
                             <div class="font-medium">${atmosphereData.temperature.humidity}</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-drop-half text-blue-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Dew Point</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-drop-half text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Dew Point</div>
                             <div class="font-medium">${atmosphereData.temperature.dewPoint}</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-cloud-fog text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Fog Risk</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-cloud-fog text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Fog Risk</div>
                             <div class="font-medium ${
-                                atmosphereData.visibility.fogRisk === 'High' ? 'text-red-400' :
-                                atmosphereData.visibility.fogRisk === 'Moderate' ? 'text-yellow-400' : 'text-green-400'
+                                atmosphereData.visibility.fogRisk === 'High' ? 'text-red-400 dark:text-red-400' :
+                                atmosphereData.visibility.fogRisk === 'Moderate' ? 'text-yellow-400 dark:text-yellow-400' : 'text-green-400 dark:text-green-400'
                             }">${atmosphereData.visibility.fogRisk}</div>
                         </div>
                     </div>
 
                     <!-- Pressure Analysis -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-gauge"></i> Atmospheric Pressure
                         </h4>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <div class="text-lg font-bold">${atmosphereData.pressure.current}</div>
-                                <div class="text-xs text-gray-400">${atmosphereData.pressure.series.label}</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400">${atmosphereData.pressure.series.label}</div>
                             </div>
                             <div>
                                 <div class="text-lg font-bold ${
-                                    atmosphereData.pressure.trend.includes('Falling') ? 'text-red-400' :
-                                    atmosphereData.pressure.trend.includes('Rising') ? 'text-green-400' : 'text-yellow-400'
+                                    atmosphereData.pressure.trend.includes('Falling') ? 'text-red-400 dark:text-red-400' :
+                                    atmosphereData.pressure.trend.includes('Rising') ? 'text-green-400 dark:text-green-400' : 'text-yellow-400 dark:text-yellow-400'
                                 }">${atmosphereData.pressure.trend}</div>
-                                <div class="text-xs text-gray-400">3-hour trend</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400">3-hour trend</div>
                             </div>
                         </div>
                         ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                            <div class="mt-3 text-xs text-gray-400 p-2 bg-blue-500 bg-opacity-10 rounded">
+                            <div class="mt-3 text-xs text-neutral-500 dark:text-neutral-400 p-2 bg-blue-500 dark:bg-blue-900 bg-opacity-10 rounded">
                                 💡 ${atmosphereData.pressure.trend.includes('Falling') ? 'Falling pressure often brings unsettled weather' : 
                                      atmosphereData.pressure.trend.includes('Rising') ? 'Rising pressure typically means improving conditions' :
                                      'Steady pressure suggests stable weather'}
@@ -1165,13 +1168,13 @@ export const advancedWeather = {
 
                     <!-- Cloud Layers -->
                     ${cloudLayers.length > 0 ? `
-                        <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                            <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
                                 <i class="ph ph-cloud"></i> Cloud Layers
                             </h4>
-                            <div class="text-sm text-gray-300">${cloudLayers.join(', ')}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">${cloudLayers.join(', ')}</div>
                             ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                                <div class="mt-2 text-xs text-gray-400">
+                                <div class="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                                     💡 High clouds often indicate weather changes in 24-48h
                                 </div>
                             ` : ''}
@@ -1180,10 +1183,10 @@ export const advancedWeather = {
 
                     <!-- Visibility -->
                     ${atmosphereData.visibility.current.level !== 'Unknown' ? `
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg">
+                        <div class="p-3">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <i class="ph ph-eye text-gray-400"></i>
+                                    <i class="ph ph-eye text-neutral-500 dark:text-neutral-400"></i>
                                     <span class="text-sm font-medium">Visibility</span>
                                 </div>
                                 <span class="font-medium">${atmosphereData.visibility.current.description}</span>
@@ -1223,12 +1226,12 @@ export const advancedWeather = {
                         const time = new Date(hourly.time[i]);
                         return prob >= 80;
                     }) ? `
-                        <div class="p-3 bg-red-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-red-300 mb-2">
+                        <div class="p-3 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-red-300 dark:text-red-400 mb-2">
                                 <i class="ph ph-warning-circle"></i>
                                 <span class="font-medium">High Rain Probability Alert</span>
                             </div>
-                            <div class="text-sm text-gray-300">
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                 ${hourly.precipitation_probability.slice(0, 24)
                                     .map((prob, i) => ({ prob, hour: i }))
                                     .filter(({ prob }) => prob >= 80)
@@ -1265,11 +1268,11 @@ export const advancedWeather = {
 
             // Elevated winds analysis
             const elevatedWinds = [];
-            if (hourly.wind_speed_80m?.[0]) {
-                elevatedWinds.push({ height: '80m', speed: hourly.wind_speed_80m[0], dir: hourly.wind_direction_80m?.[0] || 0 });
+            if (hourly.wind_speed_80m?.[currentHourIndex]) {
+                elevatedWinds.push({ height: '80m', speed: hourly.wind_speed_80m[currentHourIndex], dir: hourly.wind_direction_80m?.[currentHourIndex] || 0 });
             }
-            if (hourly.wind_speed_120m?.[0]) {
-                elevatedWinds.push({ height: '120m', speed: hourly.wind_speed_120m[0], dir: hourly.wind_direction_120m?.[0] || 0 });
+            if (hourly.wind_speed_120m?.[currentHourIndex]) {
+                elevatedWinds.push({ height: '120m', speed: hourly.wind_speed_120m[currentHourIndex], dir: hourly.wind_direction_120m?.[currentHourIndex] || 0 });
             }
 
             // Beaufort scale
@@ -1279,31 +1282,31 @@ export const advancedWeather = {
                 <div class="space-y-4">
                     <!-- Current Wind Conditions -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-wind text-3xl text-blue-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-wind text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
                             <div class="text-2xl font-bold">${Math.round(current.wind_speed_10m || 0)}${speedUnit}</div>
-                            <div class="text-sm text-gray-300">${utils.getWindDirection(current.wind_direction_10m || 0)} • ${beaufort.description}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">${utils.getWindDirection(current.wind_direction_10m || 0)} • ${beaufort.description}</div>
                         </div>
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-arrows-out text-3xl text-orange-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-arrows-out text-3xl text-orange-600 dark:text-orange-400 mb-2"></i>
                             <div class="text-2xl font-bold">${Math.round(current.wind_gusts_10m || 0)}${speedUnit}</div>
-                            <div class="text-sm text-gray-300">Gusts</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">Gusts</div>
                         </div>
                     </div>
 
                     <!-- Wind Rose -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-compass"></i> Wind Rose (24h)
                         </h4>
                         <div class="flex justify-center">${windRoseSVG}</div>
-                        <div class="text-xs text-gray-400 text-center mt-2">Dominant direction: ${utils.getWindDirection(this.getDominantWindDirection(windDirs))}</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-2">Dominant direction: ${utils.getWindDirection(this.getDominantWindDirection(windDirs))}</div>
                     </div>
 
                     <!-- Elevated Winds -->
                     ${elevatedWinds.length > 0 ? `
-                        <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                        <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                            <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                                 <i class="ph ph-airplane"></i> Elevated Winds
                             </h4>
                             <div class="space-y-2">
@@ -1319,7 +1322,7 @@ export const advancedWeather = {
                                 `).join('')}
                             </div>
                             ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                                <div class="mt-3 text-xs text-gray-400 p-2 bg-blue-500 bg-opacity-10 rounded">
+                                <div class="mt-3 text-xs text-neutral-500 dark:text-neutral-400 p-2 bg-blue-500 dark:bg-blue-900 bg-opacity-10 rounded">
                                     💡 Wind typically increases with altitude due to reduced surface friction
                                 </div>
                             ` : ''}
@@ -1329,27 +1332,27 @@ export const advancedWeather = {
                     <!-- Marine Conditions -->
                     ${marine?.current ? `
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                                <i class="ph ph-waves text-blue-400 text-lg mb-1"></i>
-                                <div class="text-xs text-gray-400 mb-1">Wave Height</div>
+                            <div class="p-3 text-center">
+                                <i class="ph ph-waves text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wave Height</div>
                                 <div class="font-medium">${(marine.current.wave_height || 0).toFixed(1)}m</div>
                             </div>
-                            <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                                <i class="ph ph-thermometer-cold text-blue-300 text-lg mb-1"></i>
-                                <div class="text-xs text-gray-400 mb-1">Freezing Level</div>
-                                <div class="font-medium">${Math.round((hourly.freezing_level_height?.[0] || 0) / 1000)}km</div>
+                            <div class="p-3 text-center">
+                                <i class="ph ph-thermometer-cold text-blue-300 dark:text-blue-400 text-lg mb-1"></i>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Freezing Level</div>
+                                <div class="font-medium">${Math.round((hourly.freezing_level_height?.[currentHourIndex] || 0) / 1000)}km</div>
                             </div>
                         </div>
                     ` : ''}
 
                     <!-- Wind Alerts -->
                     ${(current.wind_gusts_10m || 0) > 40 ? `
-                        <div class="p-3 bg-orange-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-orange-300 mb-1">
+                        <div class="p-3 bg-orange-500 dark:bg-orange-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 mb-1">
                                 <i class="ph ph-warning-circle"></i>
                                 <span class="font-medium">Strong Wind Alert</span>
                             </div>
-                            <div class="text-sm text-gray-300">
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                 Gusts reaching ${Math.round(current.wind_gusts_10m)}${speedUnit} - exercise caution outdoors
                             </div>
                         </div>
@@ -1357,12 +1360,12 @@ export const advancedWeather = {
 
                     <!-- Sailing Conditions -->
                     ${this.deps.state.settings?.widgets?.weather?.sailingMode ? `
-                        <div class="p-3 bg-blue-500 bg-opacity-10 rounded-lg">
-                            <div class="flex items-center gap-2 text-blue-300 mb-2">
+                        <div class="p-3 bg-blue-500 dark:bg-blue-900 bg-opacity-10 rounded-lg">
+                            <div class="flex items-center gap-2 text-blue-300 dark:text-blue-400 mb-2">
                                 <i class="ph ph-sailboat"></i>
                                 <span class="font-medium">Sailing Conditions</span>
                             </div>
-                            <div class="text-sm text-gray-300">
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                 ${this.getSailingConditions(current.wind_speed_10m || 0, current.wind_gusts_10m || 0, marine?.current?.wave_height || 0)}
                             </div>
                         </div>
@@ -1454,37 +1457,37 @@ export const advancedWeather = {
                     <div class="text-center">
                         <i class="ph ${weatherInfo.icon} text-5xl mb-3"></i>
                         <div class="text-4xl font-bold mb-2">${Math.round(current.temperature_2m)}${tempUnit}</div>
-                        <div class="text-lg text-gray-300 mb-1">${weatherInfo.label}</div>
-                        <div class="text-sm text-gray-400">Feels like ${Math.round(current.apparent_temperature)}${tempUnit}</div>
+                        <div class="text-lg text-neutral-500 dark:text-neutral-400 mb-1">${weatherInfo.label}</div>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">Feels like ${Math.round(current.apparent_temperature)}${tempUnit}</div>
                     </div>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div class="text-center p-3 bg-white bg-opacity-5 rounded-lg">
-                            <i class="ph ph-drop text-blue-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Humidity</div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-drop text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Humidity</div>
                             <div class="font-medium">${current.relative_humidity_2m}%</div>
                         </div>
-                        <div class="text-center p-3 bg-white bg-opacity-5 rounded-lg">
-                            <i class="ph ph-wind text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Wind</div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-wind text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind</div>
                             <div class="font-medium">${Math.round(current.wind_speed_10m)}${speedUnit}</div>
-                            <div class="text-xs text-gray-500">${windDir}</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">${windDir}</div>
                         </div>
-                        <div class="text-center p-3 bg-white bg-opacity-5 rounded-lg">
-                            <i class="ph ph-gauge text-yellow-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Pressure</div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-gauge text-yellow-400 dark:text-yellow-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Pressure</div>
                             <div class="font-medium">${this.deps.utils.weatherUtils.convertPressure(current.pressure_msl, units)}${pressureUnit}</div>
                         </div>
-                        <div class="text-center p-3 bg-white bg-opacity-5 rounded-lg">
-                            <i class="ph ph-cloud text-gray-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Cloud Cover</div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-cloud text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Cloud Cover</div>
                             <div class="font-medium">${current.cloud_cover}%</div>
                         </div>
                     </div>
                     
                     ${current.precipitation > 0 ? `
-                        <div class="p-3 bg-blue-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-blue-300">
+                        <div class="p-3 bg-blue-500 dark:bg-blue-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-blue-300 dark:text-blue-400">
                                 <i class="ph ph-cloud-rain text-lg"></i>
                                 <span class="font-medium">Precipitation: ${current.precipitation.toFixed(1)} mm/h</span>
                             </div>
@@ -1533,13 +1536,13 @@ export const advancedWeather = {
             
             contentEl.innerHTML = `
                 <div class="space-y-4">
-                    <div class="bg-white bg-opacity-5 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3">24-Hour Temperature Trend</h4>
+                    <div class="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">24-Hour Temperature Trend</h4>
                         <svg width="100%" height="50" viewBox="0 0 200 40" class="mb-2">
                             <polyline points="${sparklinePoints}" fill="none" stroke="#60a5fa" stroke-width="2"/>
                             <circle cx="0" cy="${40 - ((temps[0] - minTemp) / tempRange) * 30}" r="2" fill="#60a5fa"/>
                         </svg>
-                        <div class="flex justify-between text-xs text-gray-400">
+                        <div class="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                             <span>Now: ${Math.round(temps[0])}${tempUnit}</span>
                             <span>24h: ${Math.round(temps[23])}${tempUnit}</span>
                         </div>
@@ -1554,7 +1557,7 @@ export const advancedWeather = {
                             const weatherInfo = this.deps.utils.weatherUtils.getWeatherInfo(weatherCode);
                             
                             return `
-                                <div class="flex items-center justify-between p-2 hover:bg-white hover:bg-opacity-5 rounded">
+                                <div class="flex items-center justify-between p-2 hover:bg-white dark:hover:bg-neutral-600 hover:bg-opacity-5 rounded">
                                     <div class="flex items-center gap-3 min-w-0 flex-1">
                                         <div class="text-sm font-medium w-12 flex-shrink-0">
                                             ${time.getHours().toString().padStart(2, '0')}:00
@@ -1563,7 +1566,7 @@ export const advancedWeather = {
                                         <div class="min-w-0">
                                             <div class="text-sm truncate">${weatherInfo.label}</div>
                                             ${hourly.precipitation_probability?.[i] ? `
-                                                <div class="text-xs text-blue-400">${Math.round(hourly.precipitation_probability[i])}% rain</div>
+                                                <div class="text-xs text-blue-600 dark:text-blue-400">${Math.round(hourly.precipitation_probability[i])}% rain</div>
                                             ` : ''}
                                         </div>
                                     </div>
@@ -1571,7 +1574,7 @@ export const advancedWeather = {
                                         <div class="text-sm font-medium">
                                             ${weatherPresentation.renderStateTriad(hourly, 'temperature_2m', { index: i, unit: tempUnit })}
                                         </div>
-                                        <div class="text-xs text-gray-400">
+                                        <div class="text-xs text-neutral-500 dark:text-neutral-400">
                                             ${weatherPresentation.renderStateTriad(hourly, 'wind_speed_10m', { index: i, unit: units === 'metric' ? ' km/h' : ' mph' })}
                                         </div>
                                     </div>
@@ -1603,7 +1606,7 @@ export const advancedWeather = {
                         const weatherInfo = this.deps.utils.weatherUtils.getWeatherInfo(weatherCode);
                         
                         return `
-                            <div class="flex items-center justify-between p-3 hover:bg-white hover:bg-opacity-5 rounded-lg">
+                            <div class="flex items-center justify-between p-3 hover:bg-white dark:hover:bg-neutral-600 hover:bg-opacity-5 rounded-lg">
                                 <div class="flex items-center gap-4 min-w-0 flex-1">
                                     <div class="text-sm font-medium w-16 flex-shrink-0">
                                         ${i === 0 ? 'Today' : date.toLocaleDateString('en-GB', { weekday: 'short' })}
@@ -1612,22 +1615,22 @@ export const advancedWeather = {
                                     <div class="min-w-0">
                                         <div class="text-sm">${weatherInfo.label}</div>
                                         ${daily.precipitation_sum?.[i] > 0 ? `
-                                            <div class="text-xs text-blue-400">${daily.precipitation_sum[i].toFixed(1)}mm rain</div>
+                                            <div class="text-xs text-blue-600 dark:text-blue-400">${daily.precipitation_sum[i].toFixed(1)}mm rain</div>
                                         ` : daily.precipitation_probability_max?.[i] > 0 ? `
-                                            <div class="text-xs text-gray-400">${Math.round(daily.precipitation_probability_max[i])}% chance</div>
+                                            <div class="text-xs text-neutral-500 dark:text-neutral-400">${Math.round(daily.precipitation_probability_max[i])}% chance</div>
                                         ` : ''}
                                     </div>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-sm font-medium">
-                                        <span class="text-gray-300">
+                                        <span class="text-neutral-500 dark:text-neutral-400">
                                             ${weatherPresentation.renderStateTriad(daily, 'temperature_2m_min', { index: i, unit: '°' })}
                                         </span>
                                         <span class="ml-1">
                                             ${weatherPresentation.renderStateTriad(daily, 'temperature_2m_max', { index: i, unit: tempUnit })}
                                         </span>
                                     </div>
-                                    <div class="text-xs text-gray-400">
+                                    <div class="text-xs text-neutral-500 dark:text-neutral-400">
                                         UV ${weatherPresentation.renderStateTriad(daily, 'uv_index_max', { index: i, unit: '' })}
                                     </div>
                                 </div>
@@ -1635,20 +1638,20 @@ export const advancedWeather = {
                         `;
                     }).filter(html => html !== '').join('') || this.renderNoDataInRange('No daily forecast data')}
                     
-                    <div class="mt-4 p-3 bg-white bg-opacity-5 rounded-lg">
+                    <div class="mt-4 p-3">
                         <div class="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                                <div class="text-xs text-gray-400 mb-1">Sunrise Today</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sunrise Today</div>
                                 <div class="font-medium">
                                     ${daily.sunrise?.[0] ? this.deps.utils.weatherUtils.formatTime(daily.sunrise[0]) : 
-                                      '<span class="text-orange-300">Not available</span>'}
+                                      '<span class="text-orange-600 dark:text-orange-400">Not available</span>'}
                                 </div>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-400 mb-1">Sunset Today</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sunset Today</div>
                                 <div class="font-medium">
                                     ${daily.sunset?.[0] ? this.deps.utils.weatherUtils.formatTime(daily.sunset[0]) : 
-                                      '<span class="text-orange-300">Not available</span>'}
+                                      '<span class="text-orange-600 dark:text-orange-400">Not available</span>'}
                                 </div>
                             </div>
                         </div>
@@ -1669,32 +1672,32 @@ export const advancedWeather = {
             
             contentEl.innerHTML = `
                 <div class="space-y-4">
-                    <div class="text-center p-4 bg-white bg-opacity-5 rounded-lg">
+                    <div class="text-center p-4">
                         <div class="text-3xl font-bold ${aqiInfo.color} mb-2">${Math.round(aqi)}</div>
                         <div class="text-lg mb-1">${aqiInfo.level}</div>
-                        <div class="text-xs text-gray-400">European AQI</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400">European AQI</div>
                     </div>
                     
                     <div class="space-y-2">
-                        <div class="flex justify-between items-center p-2 bg-white bg-opacity-5 rounded">
+                        <div class="flex justify-between items-center p-2">
                             <span class="text-sm">PM2.5</span>
                             <span class="text-sm font-medium">${(current.pm2_5 || 0).toFixed(1)} µg/m³</span>
                         </div>
-                        <div class="flex justify-between items-center p-2 bg-white bg-opacity-5 rounded">
+                        <div class="flex justify-between items-center p-2">
                             <span class="text-sm">PM10</span>
                             <span class="text-sm font-medium">${(current.pm10 || 0).toFixed(1)} µg/m³</span>
                         </div>
-                        <div class="flex justify-between items-center p-2 bg-white bg-opacity-5 rounded">
+                        <div class="flex justify-between items-center p-2">
                             <span class="text-sm">Ozone (O₃)</span>
                             <span class="text-sm font-medium">${(current.ozone || 0).toFixed(1)} µg/m³</span>
                         </div>
-                        <div class="flex justify-between items-center p-2 bg-white bg-opacity-5 rounded">
+                        <div class="flex justify-between items-center p-2">
                             <span class="text-sm">NO₂</span>
                             <span class="text-sm font-medium">${(current.nitrogen_dioxide || 0).toFixed(1)} µg/m³</span>
                         </div>
                     </div>
                     
-                    <div class="text-xs text-gray-400 p-3 bg-blue-500 bg-opacity-10 rounded-lg">
+                    <div class="text-neutral-700 dark:text-neutral-200 px-3 py-1 rounded-lg text-xs font-medium text-blue-100 dark:text-blue-200">
                         <p class="mb-1"><strong>Health Note:</strong></p>
                         ${this.getHealthAdvice(aqiInfo.level)}
                     </div>
@@ -1714,28 +1717,28 @@ export const advancedWeather = {
             
             contentEl.innerHTML = `
                 <div class="space-y-4">
-                    <div class="text-center p-4 bg-white bg-opacity-5 rounded-lg">
-                        <i class="ph ph-waves text-4xl text-blue-400 mb-3"></i>
+                    <div class="text-center p-4">
+                        <i class="ph ph-waves text-4xl text-blue-600 dark:text-blue-400 mb-3"></i>
                         <div class="text-2xl font-bold mb-1">${waveHeight.toFixed(1)}m</div>
-                        <div class="text-sm text-gray-300">Significant Wave Height</div>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">Significant Wave Height</div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">Wave Direction</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wave Direction</div>
                             <div class="font-medium">${waveDir}</div>
-                            <div class="text-xs text-gray-500">${Math.round(current.wave_direction || 0)}°</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">${Math.round(current.wave_direction || 0)}°</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">Wave Period</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wave Period</div>
                             <div class="font-medium">${(current.wave_period || 0).toFixed(1)}s</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">Wind Wave Height</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Height</div>
                             <div class="font-medium">${(current.wind_wave_height || 0).toFixed(1)}m</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">Wind Wave Period</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Period</div>
                             <div class="font-medium">${(current.wind_wave_period || 0).toFixed(1)}s</div>
                         </div>
                     </div>
@@ -1765,24 +1768,24 @@ export const advancedWeather = {
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">7-Day Avg High</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">7-Day Avg High</div>
                             <div class="font-medium">${Math.round(avgMaxTemp)}${tempUnit}</div>
-                            <div class="text-xs ${todayMax > avgMaxTemp ? 'text-red-400' : 'text-blue-400'}">
+                            <div class="text-xs ${todayMax > avgMaxTemp ? 'text-red-400 dark:text-red-400 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}">
                                 Today: ${todayMax > avgMaxTemp ? '+' : ''}${Math.round(todayMax - avgMaxTemp)}°
                             </div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <div class="text-xs text-gray-400 mb-1">7-Day Avg Low</div>
+                        <div class="p-3 text-center">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">7-Day Avg Low</div>
                             <div class="font-medium">${Math.round(avgMinTemp)}${tempUnit}</div>
-                            <div class="text-xs ${todayMin > avgMinTemp ? 'text-red-400' : 'text-blue-400'}">
+                            <div class="text-xs ${todayMin > avgMinTemp ? 'text-red-400 dark:text-red-400 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}">
                                 Today: ${todayMin > avgMinTemp ? '+' : ''}${Math.round(todayMin - avgMinTemp)}°
                             </div>
                         </div>
                     </div>
                     
-                    <div class="p-3 bg-white bg-opacity-5 rounded-lg">
-                        <div class="text-xs text-gray-400 mb-2">Past 7 Days Temperature Range</div>
+                    <div class="p-3">
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Past 7 Days Temperature Range</div>
                         <div class="space-y-1">
                             ${daily.time.map((dateStr, i) => {
                                 const date = new Date(dateStr);
@@ -1792,10 +1795,10 @@ export const advancedWeather = {
                                 return `
                                     <div class="flex items-center justify-between py-1">
                                         <span class="text-xs w-16">${dayLabel}</span>
-                                        <div class="flex-1 mx-2 h-1 bg-gray-600 rounded relative">
-                                            <div class="absolute h-full bg-blue-400 rounded" style="width: 50%; left: 25%"></div>
+                                        <div class="flex-1 mx-2 h-1 bg-neutral-300 dark:bg-neutral-600 rounded relative">
+                                            <div class="absolute h-full bg-blue-500 dark:bg-blue-400 rounded" style="width: 50%; left: 25%"></div>
                                         </div>
-                                        <span class="text-xs text-gray-300 w-16 text-right">
+                                        <span class="text-xs text-neutral-500 dark:text-neutral-400 w-16 text-right">
                                             ${Math.round(daily.temperature_2m_min[i])}° / ${Math.round(daily.temperature_2m_max[i])}°
                                         </span>
                                     </div>
@@ -1804,10 +1807,10 @@ export const advancedWeather = {
                         </div>
                     </div>
                     
-                    <div class="p-3 bg-white bg-opacity-5 rounded-lg">
+                    <div class="p-3">
                         <div class="text-center">
-                            <div class="text-lg font-medium text-blue-400 mb-1">${totalPrecip.toFixed(1)}mm</div>
-                            <div class="text-xs text-gray-400">Total precipitation last 7 days</div>
+                            <div class="text-lg font-medium text-blue-600 dark:text-blue-400 mb-1">${totalPrecip.toFixed(1)}mm</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">Total precipitation last 7 days</div>
                         </div>
                     </div>
                 </div>
@@ -1816,7 +1819,7 @@ export const advancedWeather = {
         
         getErrorMessage(message) {
             return `
-                <div class="text-center text-red-300 py-8">
+                <div class="text-center text-red-300 dark:text-red-400 py-8">
                     <i class="ph ph-warning text-2xl mb-2"></i>
                     <p>${message}</p>
                 </div>
@@ -1839,30 +1842,30 @@ export const advancedWeather = {
             // Show legacy tab selector
             contentEl.innerHTML = `
                 <div class="space-y-4">
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3">Classic Weather Views</h4>
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">Classic Weather Views</h4>
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="now">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="now">
                                 <i class="ph ph-clock text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Now</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="hourly">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="hourly">
                                 <i class="ph ph-chart-line text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Hourly</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="daily">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="daily">
                                 <i class="ph ph-calendar text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Daily</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="airquality">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="airquality">
                                 <i class="ph ph-leaf text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Air Quality</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="marine">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="marine">
                                 <i class="ph ph-waves text-xl mb-2"></i>
                                 <div class="text-sm font-medium">Marine</div>
                             </button>
-                            <button class="legacy-tab-btn p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-colors" data-legacy-tab="history">
+                            <button class="legacy-tab-btn p-3 hover:bg-opacity-10 transition-colors" data-legacy-tab="history">
                                 <i class="ph ph-chart-bar text-xl mb-2"></i>
                                 <div class="text-sm font-medium">History</div>
                             </button>
@@ -1892,69 +1895,72 @@ export const advancedWeather = {
             const hourly = this.weatherData.hourly;
             const current = this.weatherData.current;
             const utils = this.deps.utils.weatherUtils;
+            
+            // Find current hour index for accurate UV/solar data
+            const currentHourIndex = this.getCurrentHourIndex(hourly.time);
 
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <!-- Current Solar Conditions -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-sun text-3xl text-yellow-400 mb-2"></i>
-                            <div class="text-2xl font-bold">${Math.round(hourly.uv_index?.[0] || 0)}</div>
-                            <div class="text-sm text-gray-300">UV Index</div>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-sun text-3xl text-yellow-400 dark:text-yellow-400 mb-2"></i>
+                            <div class="text-2xl font-bold">${Math.round(hourly.uv_index?.[currentHourIndex >= 0 ? currentHourIndex : 0] || 0)}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">UV Index</div>
                         </div>
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-lightning text-3xl text-orange-400 mb-2"></i>
-                            <div class="text-2xl font-bold">${Math.round(hourly.shortwave_radiation?.[0] || 0)}</div>
-                            <div class="text-sm text-gray-300">W/m² Solar</div>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-lightning text-3xl text-orange-600 dark:text-orange-400 mb-2"></i>
+                            <div class="text-2xl font-bold">${Math.round(hourly.shortwave_radiation?.[currentHourIndex >= 0 ? currentHourIndex : 0] || 0)}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">W/m² Solar</div>
                         </div>
                     </div>
 
                     <!-- Sun Position -->
                     <div class="grid grid-cols-3 gap-3 text-sm">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-arrow-up text-yellow-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Sunrise</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-arrow-up text-yellow-400 dark:text-yellow-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sunrise</div>
                             <div class="font-medium">${utils.formatTime(daily.sunrise?.[0] || '')}</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-arrow-down text-orange-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Sunset</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-arrow-down text-orange-600 dark:text-orange-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sunset</div>
                             <div class="font-medium">${utils.formatTime(daily.sunset?.[0] || '')}</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-clock text-blue-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">Daylight</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-clock text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Daylight</div>
                             <div class="font-medium">${Math.round((daily.daylight_duration?.[0] || 0) / 3600)}h</div>
                         </div>
                     </div>
 
                     <!-- Solar Radiation Breakdown -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-sun-dim"></i> Solar Radiation Analysis
                         </h4>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span>Global Horizontal (GHI)</span>
-                                <span class="font-medium">${Math.round(hourly.shortwave_radiation?.[0] || 0)} W/m²</span>
+                                <span class="font-medium">${Math.round(hourly.shortwave_radiation?.[currentHourIndex >= 0 ? currentHourIndex : 0] || 0)} W/m²</span>
                             </div>
-                            ${hourly.direct_normal_irradiance?.[0] ? `
+                            ${hourly.direct_normal_irradiance?.[currentHourIndex >= 0 ? currentHourIndex : 0] ? `
                                 <div class="flex justify-between">
                                     <span>Direct Normal (DNI)</span>
-                                    <span class="font-medium">${Math.round(hourly.direct_normal_irradiance[0])} W/m²</span>
+                                    <span class="font-medium">${Math.round(hourly.direct_normal_irradiance[currentHourIndex >= 0 ? currentHourIndex : 0])} W/m²</span>
                                 </div>
                             ` : ''}
                         </div>
                         ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                            <div class="mt-3 text-xs text-gray-400 p-2 bg-yellow-500 bg-opacity-10 rounded">
+                            <div class="mt-3 text-xs text-neutral-500 dark:text-neutral-400 p-2 bg-yellow-500 dark:bg-yellow-900 bg-opacity-10 rounded">
                                 💡 Solar panels are most efficient with direct sunlight (DNI)
                             </div>
                         ` : ''}
                     </div>
 
                     <!-- Next 3 Days Daylight -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-calendar"></i> Upcoming Daylight
                         </h4>
                         <div class="space-y-2">
@@ -1968,10 +1974,10 @@ export const advancedWeather = {
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-3">
                                             <span class="text-sm font-medium w-20">${dayLabel}</span>
-                                            <span class="text-xs text-gray-400">${hours}h daylight</span>
+                                            <span class="text-xs text-neutral-500 dark:text-neutral-400">${hours}h daylight</span>
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <span class="text-xs ${uvMax > 7 ? 'text-red-400' : uvMax > 3 ? 'text-yellow-400' : 'text-green-400'}">
+                                            <span class="text-xs ${uvMax > 7 ? 'text-red-400 dark:text-red-400' : uvMax > 3 ? 'text-yellow-400 dark:text-yellow-400' : 'text-green-400 dark:text-green-400'}">
                                                 UV ${uvMax}
                                             </span>
                                         </div>
@@ -1982,14 +1988,14 @@ export const advancedWeather = {
                     </div>
 
                     <!-- UV Safety -->
-                    ${(hourly.uv_index?.[0] || 0) > 6 ? `
-                        <div class="p-3 bg-yellow-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-yellow-300 mb-1">
+                    ${(hourly.uv_index?.[currentHourIndex >= 0 ? currentHourIndex : 0] || 0) > 6 ? `
+                        <div class="p-3 bg-yellow-500 dark:bg-yellow-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-yellow-300 dark:text-yellow-400 mb-1">
                                 <i class="ph ph-warning-circle"></i>
                                 <span class="font-medium">High UV Alert</span>
                             </div>
-                            <div class="text-sm text-gray-300">
-                                UV Index ${Math.round(hourly.uv_index[0])} - Seek shade, wear sunscreen and protective clothing
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
+                                UV Index ${Math.round(hourly.uv_index[currentHourIndex >= 0 ? currentHourIndex : 0])} - Seek shade, wear sunscreen and protective clothing
                             </div>
                         </div>
                     ` : ''}
@@ -2007,54 +2013,55 @@ export const advancedWeather = {
             const airQuality = this.airQualityData;
             const units = this.getUnits();
             const tempUnit = units === 'metric' ? '°C' : '°F';
+            const currentHourIndex = this.getCurrentHourIndex(hourly.time);
 
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <!-- Soil Temperature Profile -->
-                    <div class="p-4 bg-white bg-opacity-10 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-thermometer"></i> Soil Temperature Profile
                         </h4>
                         <div class="space-y-2">
                             ${[
-                                { depth: '0cm', temp: hourly.soil_temperature_0cm?.[0], label: 'Surface' },
-                                { depth: '6cm', temp: hourly.soil_temperature_6cm?.[0], label: 'Shallow' },
-                                { depth: '18cm', temp: hourly.soil_temperature_18cm?.[0], label: 'Root zone' },
-                                { depth: '54cm', temp: hourly.soil_temperature_54cm?.[0], label: 'Deep' }
+                                { depth: '0cm', temp: hourly.soil_temperature_0cm?.[currentHourIndex], label: 'Surface' },
+                                { depth: '6cm', temp: hourly.soil_temperature_6cm?.[currentHourIndex], label: 'Shallow' },
+                                { depth: '18cm', temp: hourly.soil_temperature_18cm?.[currentHourIndex], label: 'Root zone' },
+                                { depth: '54cm', temp: hourly.soil_temperature_54cm?.[currentHourIndex], label: 'Deep' }
                             ].map(soil => soil.temp ? `
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
                                         <span class="text-sm w-16">${soil.depth}</span>
-                                        <span class="text-xs text-gray-400">${soil.label}</span>
+                                        <span class="text-xs text-neutral-500 dark:text-neutral-400">${soil.label}</span>
                                     </div>
                                     <span class="font-medium">${Math.round(soil.temp)}${tempUnit}</span>
                                 </div>
                             ` : '').join('')}
                         </div>
                         ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                            <div class="mt-3 text-xs text-gray-400 p-2 bg-green-500 bg-opacity-10 rounded">
+                            <div class="mt-3 text-xs text-neutral-500 dark:text-neutral-400 p-2 bg-green-500 dark:bg-green-900 bg-opacity-10 rounded">
                                 💡 Soil temperature affects plant growth and root development
                             </div>
                         ` : ''}
                     </div>
 
                     <!-- Soil Moisture Levels -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-drop"></i> Soil Moisture Profile
                         </h4>
                         <div class="space-y-2">
                             ${[
-                                { depth: '0-1cm', moisture: hourly.soil_moisture_0_to_1cm?.[0] },
-                                { depth: '1-3cm', moisture: hourly.soil_moisture_1_to_3cm?.[0] },
-                                { depth: '3-9cm', moisture: hourly.soil_moisture_3_to_9cm?.[0] },
-                                { depth: '9-27cm', moisture: hourly.soil_moisture_9_to_27cm?.[0] }
+                                { depth: '0-1cm', moisture: hourly.soil_moisture_0_to_1cm?.[currentHourIndex] },
+                                { depth: '1-3cm', moisture: hourly.soil_moisture_1_to_3cm?.[currentHourIndex] },
+                                { depth: '3-9cm', moisture: hourly.soil_moisture_3_to_9cm?.[currentHourIndex] },
+                                { depth: '9-27cm', moisture: hourly.soil_moisture_9_to_27cm?.[currentHourIndex] }
                             ].map(soil => soil.moisture !== undefined ? `
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm">${soil.depth}</span>
                                     <div class="flex items-center gap-2">
-                                        <div class="w-20 h-2 bg-gray-600 rounded-full overflow-hidden">
-                                            <div class="h-full bg-blue-400 rounded-full" style="width: ${Math.min(soil.moisture * 100, 100)}%"></div>
+                                        <div class="w-20 h-2 bg-neutral-300 dark:bg-neutral-600 rounded-full overflow-hidden">
+                                            <div class="h-full bg-blue-500 dark:bg-blue-400 rounded-full" style="width: ${Math.min(soil.moisture * 100, 100)}%"></div>
                                         </div>
                                         <span class="text-xs font-medium w-12">${(soil.moisture * 100).toFixed(0)}%</span>
                                     </div>
@@ -2065,22 +2072,22 @@ export const advancedWeather = {
 
                     <!-- Evapotranspiration -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-plant text-green-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">ET₀ (1h)</div>
-                            <div class="font-medium">${(hourly.et0_fao_evapotranspiration?.[0] || 0).toFixed(2)}mm</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-plant text-green-400 dark:text-green-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">ET₀ (1h)</div>
+                            <div class="font-medium">${(hourly.et0_fao_evapotranspiration?.[currentHourIndex] || 0).toFixed(2)}mm</div>
                         </div>
-                        <div class="p-3 bg-white bg-opacity-5 rounded-lg text-center">
-                            <i class="ph ph-droplet text-blue-400 text-lg mb-1"></i>
-                            <div class="text-xs text-gray-400 mb-1">VPD</div>
-                            <div class="font-medium">${((hourly.vapour_pressure_deficit?.[0] || 0) / 1000).toFixed(1)}kPa</div>
+                        <div class="p-3 text-center">
+                            <i class="ph ph-droplet text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">VPD</div>
+                            <div class="font-medium">${((hourly.vapour_pressure_deficit?.[currentHourIndex] || 0) / 1000).toFixed(1)}kPa</div>
                         </div>
                     </div>
 
                     <!-- Air Quality Integration -->
                     ${airQuality?.current ? `
-                        <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                        <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                            <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                                 <i class="ph ph-lungs"></i> Air Quality for Outdoor Activities
                             </h4>
                             <div class="flex items-center justify-between mb-2">
@@ -2089,15 +2096,15 @@ export const advancedWeather = {
                                     ${Math.round(airQuality.current.european_aqi || 0)} - ${this.deps.utils.weatherUtils.getAirQualityLevel(airQuality.current.european_aqi || 0).level}
                                 </span>
                             </div>
-                            <div class="text-xs text-gray-400">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
                                 ${(airQuality.current.pm2_5 || 0) > 25 ? '⚠️ High PM2.5 - limit intense outdoor exercise' : '✅ Air quality suitable for outdoor activities'}
                             </div>
                         </div>
                     ` : ''}
 
                     ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                        <div class="p-3 bg-blue-500 bg-opacity-10 rounded-lg">
-                            <div class="text-xs text-gray-400">
+                        <div class="p-3 bg-blue-500 dark:bg-blue-900 bg-opacity-10 rounded-lg">
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
                                 💡 <strong>ET₀</strong> measures water evaporation demand. <strong>VPD</strong> indicates atmospheric dryness affecting plant stress.
                             </div>
                         </div>
@@ -2114,11 +2121,12 @@ export const advancedWeather = {
 
             const hourly = this.weatherData.hourly;
             const utils = this.deps.utils.weatherUtils;
+            const currentHourIndex = this.getCurrentHourIndex(hourly.time);
 
-            const cape = hourly.cape?.[0] || 0;
-            const liftedIndex = hourly.lifted_index?.[0] || 0;
-            const boundaryLayerHeight = hourly.boundary_layer_height?.[0] || 0;
-            const visibility = hourly.visibility?.[0] || 0;
+            const cape = hourly.cape?.[currentHourIndex] || 0;
+            const liftedIndex = hourly.lifted_index?.[currentHourIndex] || 0;
+            const boundaryLayerHeight = hourly.boundary_layer_height?.[currentHourIndex] || 0;
+            const visibility = hourly.visibility?.[currentHourIndex] || 0;
 
             const capeInfo = utils.getCapeLevel(cape);
             const liInfo = utils.getLiftedIndexLevel(liftedIndex);
@@ -2128,23 +2136,23 @@ export const advancedWeather = {
                 <div class="space-y-4">
                     <!-- Convective Parameters -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-lightning text-3xl text-yellow-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-lightning text-3xl text-yellow-400 dark:text-yellow-400 mb-2"></i>
                             <div class="text-2xl font-bold ${capeInfo.color}">${Math.round(cape)}</div>
-                            <div class="text-sm text-gray-300">CAPE (J/kg)</div>
-                            <div class="text-xs text-gray-400 mt-1">${capeInfo.level}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">CAPE (J/kg)</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">${capeInfo.level}</div>
                         </div>
-                        <div class="p-4 bg-white bg-opacity-10 rounded-lg text-center">
-                            <i class="ph ph-arrow-up text-3xl text-blue-400 mb-2"></i>
+                        <div class="p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-center">
+                            <i class="ph ph-arrow-up text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
                             <div class="text-2xl font-bold ${liInfo.color}">${liftedIndex.toFixed(1)}</div>
-                            <div class="text-sm text-gray-300">Lifted Index (°C)</div>
-                            <div class="text-xs text-gray-400 mt-1">${liInfo.level}</div>
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">Lifted Index (°C)</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">${liInfo.level}</div>
                         </div>
                     </div>
 
                     <!-- Atmospheric Analysis -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-cloud"></i> Atmospheric Structure
                         </h4>
                         <div class="space-y-3">
@@ -2152,7 +2160,7 @@ export const advancedWeather = {
                                 <div class="flex items-center gap-3">
                                     <span class="text-sm">Boundary Layer Height</span>
                                     ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                                        <i class="ph ph-info text-gray-400" title="Height of turbulent mixing layer"></i>
+                                        <i class="ph ph-info text-neutral-500 dark:text-neutral-400" title="Height of turbulent mixing layer"></i>
                                     ` : ''}
                                 </div>
                                 <span class="font-medium">${Math.round(boundaryLayerHeight)}m</span>
@@ -2167,33 +2175,33 @@ export const advancedWeather = {
                     </div>
 
                     <!-- Thunderstorm Potential -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-cloud-lightning"></i> Thunderstorm Analysis
                         </h4>
                         <div class="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                                <div class="text-xs text-gray-400 mb-1">CAPE Assessment</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">CAPE Assessment</div>
                                 <div class="${capeInfo.color} font-medium">${capeInfo.description}</div>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-400 mb-1">Lifted Index Assessment</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Lifted Index Assessment</div>
                                 <div class="${liInfo.color} font-medium">${liInfo.description}</div>
                             </div>
                         </div>
                         ${this.deps.state.settings?.widgets?.weather?.educationalTips ? `
-                            <div class="mt-3 text-xs text-gray-400 p-2 bg-purple-500 bg-opacity-10 rounded">
+                            <div class="mt-3 text-xs text-neutral-500 dark:text-neutral-400 p-2 bg-purple-500 bg-opacity-10 rounded">
                                 💡 <strong>CAPE</strong> measures atmospheric instability. <strong>Lifted Index</strong> indicates thunderstorm potential (negative = unstable).
                             </div>
                         ` : ''}
                     </div>
 
                     <!-- Professional Weather Summary -->
-                    <div class="p-4 bg-white bg-opacity-5 rounded-lg">
-                        <h4 class="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                    <div class="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                        <h4 class="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 flex items-center gap-2">
                             <i class="ph ph-graduation-cap"></i> Meteorology 101
                         </h4>
-                        <div class="space-y-2 text-xs text-gray-400">
+                        <div class="space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
                             <div><strong>Boundary Layer:</strong> The turbulent layer where weather affects us. Higher = more mixing, better air quality dispersion.</div>
                             <div><strong>CAPE:</strong> Energy available for thunderstorms. Higher values indicate greater potential for severe weather.</div>
                             <div><strong>Lifted Index:</strong> Temperature difference when air is lifted. Negative values favor storm development.</div>
@@ -2202,22 +2210,22 @@ export const advancedWeather = {
 
                     <!-- Advanced Alerts -->
                     ${cape > 2500 && liftedIndex < -3 ? `
-                        <div class="p-3 bg-red-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-red-300 mb-1">
+                        <div class="p-3 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-red-300 dark:text-red-400 mb-1">
                                 <i class="ph ph-warning-circle"></i>
                                 <span class="font-medium">Severe Weather Potential</span>
                             </div>
-                            <div class="text-sm text-gray-300">
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                 High CAPE and negative LI suggest potential for severe thunderstorms
                             </div>
                         </div>
                     ` : cape > 1000 && liftedIndex < 0 ? `
-                        <div class="p-3 bg-yellow-500 bg-opacity-20 rounded-lg">
-                            <div class="flex items-center gap-2 text-yellow-300 mb-1">
+                        <div class="p-3 bg-yellow-500 dark:bg-yellow-900 bg-opacity-20 rounded-lg">
+                            <div class="flex items-center gap-2 text-yellow-300 dark:text-yellow-400 mb-1">
                                 <i class="ph ph-cloud-lightning"></i>
                                 <span class="font-medium">Thunderstorm Potential</span>
                             </div>
-                            <div class="text-sm text-gray-300">
+                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                 Atmospheric conditions favor thunderstorm development
                             </div>
                         </div>

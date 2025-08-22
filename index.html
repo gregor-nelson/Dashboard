@@ -5,33 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        /* Theme will be handled via JavaScript and Tailwind classes */
+        
+        /* Custom scrollbar styles for light theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
+            border-radius: 4px;
         }
-        .theme-badge {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
+        
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d8;
+            border-radius: 4px;
+            transition: background-color 0.2s;
         }
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1aa;
+        }
+        
+        /* Dark theme scrollbar styles */
+        .dark ::-webkit-scrollbar-track {
+            background: #404040;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: #525252;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #737373;
+        }
+        
+        /* Firefox scrollbar styles */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #d4d4d8 #f5f5f5;
+        }
+        
+        .dark * {
+            scrollbar-color: #525252 #404040;
         }
     </style>
+    <script>
+        // Apply theme immediately on load to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('dashboardSettings');
+            if (savedTheme) {
+                const settings = JSON.parse(savedTheme);
+                if (settings.darkTheme) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+        })();
+    </script>
 </head>
-<body class="p-4">
+<body class="p-4 bg-neutral-100 dark:bg-neutral-800 min-h-screen transition-colors">
     <div id="app">
         <!-- Header -->
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-white">Dashboard</h1>
-            <button id="settings-btn" class="glass-card rounded-lg p-3 text-white hover:bg-white hover:bg-opacity-20 transition-all">
+        <header class="flex justify-end items-center mb-8">
+            <button id="settings-btn" class="bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-3 text-neutral-800 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-600 hover:border-neutral-400 dark:hover:border-neutral-500 transition-all shadow-sm">
                 <i class="ph ph-gear text-xl"></i>
             </button>
         </header>
@@ -42,11 +86,11 @@
         </div>
 
         <!-- Settings Modal -->
-        <div id="settings-modal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50">
-            <div class="glass-card rounded-lg p-6 w-full max-w-md mx-4 text-white">
+        <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg p-6 w-full max-w-md mx-4 text-neutral-800 dark:text-neutral-100 shadow-xl">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold">Settings</h2>
-                    <button id="close-settings" class="hover:bg-white hover:bg-opacity-20 rounded p-1">
+                    <h2 class="text-xl font-semibold text-neutral-800 dark:text-neutral-100">Settings</h2>
+                    <button id="close-settings" class="hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded p-1">
                         <i class="ph ph-x text-xl"></i>
                     </button>
                 </div>
@@ -54,51 +98,51 @@
                 <div class="space-y-4">
                     <!-- Timezone Mode -->
                     <div class="flex justify-between items-center">
-                        <label class="text-sm font-medium">UTC Time</label>
+                        <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">UTC Time</label>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="utc-toggle" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <div class="w-11 h-6 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                     </div>
 
                     <!-- Theme Background -->
                     <div class="flex justify-between items-center">
-                        <label class="text-sm font-medium">Dark Theme</label>
+                        <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Dark Theme</label>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="theme-toggle" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <div class="w-11 h-6 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                     </div>
 
                     <!-- Widget Toggles -->
-                    <div class="border-t border-white border-opacity-20 pt-4">
-                        <h3 class="text-sm font-medium mb-3">Widgets</h3>
+                    <div class="border-t border-neutral-200 dark:border-neutral-600 pt-4">
+                        <h3 class="text-sm font-medium mb-3 text-neutral-700 dark:text-neutral-200">Widgets</h3>
                         <div id="widget-toggles" class="space-y-3">
                             <!-- Widget toggles will be rendered here -->
                         </div>
                     </div>
                     
                     <!-- Weather Widget Settings -->
-                    <div class="border-t border-white border-opacity-20 pt-4" id="weather-settings-section" style="display: none;">
-                        <h3 class="text-sm font-medium mb-3">Weather Settings</h3>
+                    <div class="border-t border-neutral-200 dark:border-neutral-600 pt-4" id="weather-settings-section" style="display: none;">
+                        <h3 class="text-sm font-medium mb-3 text-neutral-700 dark:text-neutral-200">Weather Settings</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
-                                <label class="text-sm font-medium">Units</label>
-                                <select id="weather-units-select" class="bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600">
+                                <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Units</label>
+                                <select id="weather-units-select" class="bg-white dark:bg-neutral-600 text-neutral-800 dark:text-neutral-100 text-sm rounded px-2 py-1 border border-neutral-300 dark:border-neutral-500">
                                     <option value="metric">Metric (°C, km/h)</option>
                                     <option value="imperial">Imperial (°F, mph)</option>
                                 </select>
                             </div>
                             <div class="flex justify-between items-center">
-                                <label class="text-sm font-medium">Auto Refresh</label>
+                                <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Auto Refresh</label>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="weather-auto-refresh" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div class="w-11 h-6 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
                             <div class="flex justify-between items-center">
-                                <label class="text-sm font-medium">Refresh Interval (min)</label>
-                                <input type="number" id="weather-refresh-interval" min="5" max="60" class="bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600 w-16">
+                                <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Refresh Interval (min)</label>
+                                <input type="number" id="weather-refresh-interval" min="5" max="60" class="bg-white dark:bg-neutral-600 text-neutral-800 dark:text-neutral-100 text-sm rounded px-2 py-1 border border-neutral-300 dark:border-neutral-500 w-16">
                             </div>
                         </div>
                     </div>

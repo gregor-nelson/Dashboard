@@ -24,20 +24,20 @@ export const widgets = {
                             <h3 class="text-lg font-semibold">Daily Quote</h3>
                         </div>
                         <div class="quote-actions flex gap-2">
-                            <button id="quote-copy" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Copy Quote">
+                            <button id="quote-copy" class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded-lg transition-colors" title="Copy Quote">
                                 <i class="ph ph-copy text-lg"></i>
                             </button>
-                            <button id="quote-shuffle" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Random Quote">
+                            <button id="quote-shuffle" class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded-lg transition-colors" title="Random Quote">
                                 <i class="ph ph-shuffle text-lg"></i>
                             </button>
-                            <button id="quote-context" class="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" title="Show Context">
+                            <button id="quote-context" class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded-lg transition-colors" title="Show Context">
                                 <i class="ph ph-info text-lg"></i>
                             </button>
                         </div>
                     </div>
                     
                     <div id="quote-content" class="quote-content">
-                        <div class="text-center text-gray-300 py-8">
+                        <div class="text-center text-neutral-500 dark:text-neutral-400 py-8">
                             <i class="ph ph-spinner text-2xl animate-spin mb-2"></i>
                             <p>Loading quote...</p>
                         </div>
@@ -63,7 +63,7 @@ export const widgets = {
             
             if (!state.currentQuote) {
                 contentEl.innerHTML = `
-                    <div class="text-center text-red-300 py-8">
+                    <div class="text-center text-red-600 dark:text-red-400 py-8">
                         <i class="ph ph-warning text-2xl mb-2"></i>
                         <p>No quotes available</p>
                     </div>
@@ -76,20 +76,20 @@ export const widgets = {
             
             contentEl.innerHTML = `
                 <div class="space-y-4">
-                    <blockquote class="text-lg leading-relaxed italic">
+                    <blockquote class="text-lg leading-relaxed italic text-neutral-700 dark:text-neutral-200">
                         "${quote.text}"
                     </blockquote>
                     
                     <div class="flex items-center justify-between text-sm">
                         <div class="flex items-center gap-3">
-                            <span class="theme-badge px-3 py-1 rounded-full text-xs font-medium ${themeColor}">
+                            <span class="bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-200 px-3 py-1 rounded-full text-xs font-medium ${themeColor}">
                                 ${quote.theme}
                             </span>
-                            <span class="text-gray-300">Book ${quote.book_roman}</span>
+                            <span class="text-neutral-500 dark:text-neutral-400">Book ${quote.book_roman}</span>
                         </div>
                     </div>
                     
-                    <div class="text-sm text-gray-300 border-t border-white border-opacity-20 pt-3">
+                    <div class="text-sm text-neutral-500 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-600 pt-3">
                         <p class="font-medium">${quote.work}</p>
                         <p>Translated by ${quote.translator}</p>
                     </div>
@@ -132,13 +132,13 @@ export const widgets = {
         
         getThemeColor(theme) {
             const colors = {
-                justice: 'bg-blue-500 bg-opacity-60 text-blue-100',
-                truth: 'bg-green-500 bg-opacity-60 text-green-100',
-                good: 'bg-yellow-500 bg-opacity-60 text-yellow-100',
-                soul: 'bg-purple-500 bg-opacity-60 text-purple-100',
-                city: 'bg-red-500 bg-opacity-60 text-red-100',
-                education: 'bg-indigo-500 bg-opacity-60 text-indigo-100',
-                general: 'bg-gray-500 bg-opacity-60 text-gray-100'
+                justice: 'bg-blue-500 bg-opacity-60 text-blue-100 dark:bg-blue-600 dark:bg-opacity-40 dark:text-blue-200',
+                truth: 'bg-green-500 bg-opacity-60 text-green-100 dark:bg-green-600 dark:bg-opacity-40 dark:text-green-200',
+                good: 'bg-yellow-500 bg-opacity-60 text-yellow-100 dark:bg-yellow-600 dark:bg-opacity-40 dark:text-yellow-200',
+                soul: 'bg-purple-500 bg-opacity-60 text-purple-100 dark:bg-purple-600 dark:bg-opacity-40 dark:text-purple-200',
+                city: 'bg-red-500 bg-opacity-60 text-red-100 dark:bg-red-600 dark:bg-opacity-40 dark:text-red-200',
+                education: 'bg-indigo-500 bg-opacity-60 text-indigo-100 dark:bg-indigo-600 dark:bg-opacity-40 dark:text-indigo-200',
+                general: 'bg-gray-500 bg-opacity-60 text-gray-100 dark:bg-gray-600 dark:bg-opacity-40 dark:text-gray-200'
             };
             return colors[theme] || colors.general;
         },
@@ -171,7 +171,7 @@ export const widgets = {
                     </div>
                     
                     <div id="finance-content" class="finance-content">
-                        <div class="text-center text-gray-300 py-8">
+                        <div class="text-center text-neutral-500 dark:text-neutral-400 py-8">
                             <i class="ph ph-spinner text-2xl animate-spin mb-2"></i>
                             <p>Loading portfolio...</p>
                         </div>
@@ -195,7 +195,7 @@ export const widgets = {
             
             if (!this.portfolioData) {
                 contentEl.innerHTML = `
-                    <div class="text-center text-red-300 py-4">
+                    <div class="text-center text-red-600 dark:text-red-400 py-4">
                         <i class="ph ph-warning text-xl mb-2"></i>
                         <p class="text-sm">Failed to load portfolio</p>
                     </div>
@@ -204,7 +204,7 @@ export const widgets = {
             }
             
             const data = this.portfolioData;
-            const changeColor = data.dayChange >= 0 ? 'text-green-400' : 'text-red-400';
+            const changeColor = data.dayChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
             const changeIcon = data.dayChange >= 0 ? 'ph-trend-up' : 'ph-trend-down';
             
             contentEl.innerHTML = `
@@ -223,7 +223,7 @@ export const widgets = {
                                 <span class="font-medium">${pos.symbol}</span>
                                 <div class="text-right">
                                     <div>$${pos.value.toLocaleString()}</div>
-                                    <div class="${pos.change >= 0 ? 'text-green-400' : 'text-red-400'}">${pos.change >= 0 ? '+' : ''}${pos.change}%</div>
+                                    <div class="${pos.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${pos.change >= 0 ? '+' : ''}${pos.change}%</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -261,7 +261,7 @@ export const widgets = {
                     </div>
                     
                     <div id="calendar-content" class="calendar-content">
-                        <div class="text-center text-gray-300 py-8">
+                        <div class="text-center text-neutral-500 dark:text-neutral-400 py-8">
                             <i class="ph ph-spinner text-2xl animate-spin mb-2"></i>
                             <p>Loading events...</p>
                         </div>
@@ -285,7 +285,7 @@ export const widgets = {
             
             if (!this.calendarData || this.calendarData.length === 0) {
                 contentEl.innerHTML = `
-                    <div class="text-center text-gray-300 py-4">
+                    <div class="text-center text-neutral-500 dark:text-neutral-400 py-4">
                         <i class="ph ph-calendar-x text-xl mb-2"></i>
                         <p class="text-sm">No upcoming events</p>
                     </div>
@@ -302,11 +302,11 @@ export const widgets = {
                         const typeIcon = this.getEventIcon(event.type);
                         
                         return `
-                            <div class="flex items-start gap-3 p-2 hover:bg-white hover:bg-opacity-5 rounded-lg transition-colors">
+                            <div class="flex items-start gap-3 p-2 hover:bg-neutral-50 dark:hover:bg-neutral-700 rounded-lg transition-colors">
                                 <i class="ph ${typeIcon} text-lg mt-0.5 flex-shrink-0"></i>
                                 <div class="flex-1 min-w-0">
                                     <div class="font-medium text-sm truncate">${event.title}</div>
-                                    <div class="text-xs text-gray-400">${timeStr}</div>
+                                    <div class="text-xs text-neutral-400 dark:text-neutral-500">${timeStr}</div>
                                 </div>
                             </div>
                         `;

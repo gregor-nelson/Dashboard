@@ -8,6 +8,28 @@ export class WeatherDataAdapter {
         this.weatherUtils = weatherUtils;
     }
 
+    // Helper function to get current hour index
+    getCurrentHourIndex(hourlyTime, timezone = 'Europe/London') {
+        if (!hourlyTime || !hourlyTime.length) return 0;
+        
+        const nowUTC = new Date();
+        const nowLocalISO = nowUTC.toLocaleString('sv-SE', { timeZone: timezone }).slice(0, 19);
+        
+        // Convert current time to comparable format
+        const now = new Date(nowLocalISO);
+        const flooredMinutes = Math.floor(now.getMinutes() / 60) * 60; // Floor to nearest hour
+        const flooredNow = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), flooredMinutes);
+        
+        // Find matching time in hourly array
+        for (let i = 0; i < hourlyTime.length; i++) {
+            const seriesTime = new Date(hourlyTime[i]);
+            if (seriesTime >= flooredNow) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     // Data alignment verification
     verifyAlignment(hourly, keys) {
         if (!hourly || !hourly.time) {
@@ -81,14 +103,15 @@ export class WeatherDataAdapter {
         const alignment = this.verifyAlignment(hourly, criticalKeys);
         
         // Inside/Outside Index with proper null handling
+        const currentHourIndex = this.getCurrentHourIndex(hourly.time);
         const indexData = {
             precip: current.precipitation ?? 0,
-            precipProb: hourly.precipitation_probability?.[0] ?? 0,
+            precipProb: hourly.precipitation_probability?.[currentHourIndex] ?? 0,
             windSpeed: current.wind_speed_10m ?? 0,
             gusts: current.wind_gusts_10m ?? 0,
             temp: current.temperature_2m,
-            visibility: hourly.visibility?.[0] ?? 10000,
-            uvIndex: hourly.uv_index?.[0] ?? 0,
+            visibility: hourly.visibility?.[currentHourIndex] ?? 10000,
+            uvIndex: hourly.uv_index?.[currentHourIndex] ?? 0,
             isDaylight: current.is_day === 1
         };
         
@@ -99,7 +122,7 @@ export class WeatherDataAdapter {
         } else {
             insideOutside = {
                 recommendation: 'Insufficient data',
-                color: 'text-gray-400',
+                color: 'text-neutral-500 dark:text-neutral-400',
                 factors: ['Temperature data missing'],
                 score: 0
             };
@@ -110,20 +133,20 @@ export class WeatherDataAdapter {
             marineData?.current?.wave_height ?? 0,
             current.wind_speed_10m ?? 0,
             current.wind_gusts_10m ?? 0,
-            hourly.visibility?.[0] ?? 10000
+            hourly.visibility?.[currentHourIndex] ?? 10000
         );
 
         // Generate alerts
         const alerts = [];
-        const precipProb = hourly.precipitation_probability?.[0];
+        const precipProb = hourly.precipitation_probability?.[currentHourIndex];
         const windGusts = current.wind_gusts_10m;
-        const uvIndex = hourly.uv_index?.[0];
+        const uvIndex = hourly.uv_index?.[currentHourIndex];
         
         if (precipProb !== null && precipProb !== undefined && precipProb >= thresholds.rainProbHigh * 100) {
             alerts.push({ 
                 icon: 'ph-cloud-rain', 
                 text: `${Math.round(precipProb)}% rain likely`, 
-                color: 'text-blue-400' 
+                color: 'text-blue-600 dark:text-blue-400' 
             });
         }
         if (windGusts !== null && windGusts !== undefined && windGusts >= thresholds.gustStrongKmh) {
@@ -131,14 +154,14 @@ export class WeatherDataAdapter {
             alerts.push({ 
                 icon: 'ph-wind', 
                 text: `Strong gusts ${gustStr}`, 
-                color: 'text-orange-400' 
+                color: 'text-orange-600 dark:text-orange-400' 
             });
         }
         if (uvIndex !== null && uvIndex !== undefined && uvIndex >= thresholds.uvHigh && current.is_day) {
             alerts.push({ 
                 icon: 'ph-sun', 
                 text: `High UV ${Math.round(uvIndex)}`, 
-                color: 'text-yellow-400' 
+                color: 'text-yellow-600 dark:text-yellow-400' 
             });
         }
 
@@ -184,12 +207,13 @@ export class WeatherDataAdapter {
 
         const current = weatherData.current;
         const hourly = weatherData.hourly;
+        const currentHourIndex = this.getCurrentHourIndex(hourly.time, timezone);
         
         // Temperature data
         const temperature = {
             current: weatherPresentation.formatWithUnits(current.temperature_2m, weatherPresentation.getTemperatureUnit(units)),
             feelsLike: weatherPresentation.formatWithUnits(current.apparent_temperature, weatherPresentation.getTemperatureUnit(units)),
-            dewPoint: weatherPresentation.formatWithUnits(hourly.dew_point_2m?.[0], weatherPresentation.getTemperatureUnit(units)),
+            dewPoint: weatherPresentation.formatWithUnits(hourly.dew_point_2m?.[currentHourIndex], weatherPresentation.getTemperatureUnit(units)),
             humidity: weatherPresentation.formatWithUnits(current.relative_humidity_2m, '%', { precision: 0 })
         };
 
@@ -205,23 +229,23 @@ export class WeatherDataAdapter {
         // Cloud data
         const clouds = {
             total: weatherPresentation.formatWithUnits(current.cloud_cover, '%', { precision: 0 }),
-            low: weatherPresentation.formatWithUnits(hourly.cloud_cover_low?.[0], '%', { precision: 0 }),
-            mid: weatherPresentation.formatWithUnits(hourly.cloud_cover_mid?.[0], '%', { precision: 0 }),
-            high: weatherPresentation.formatWithUnits(hourly.cloud_cover_high?.[0], '%', { precision: 0 })
+            low: weatherPresentation.formatWithUnits(hourly.cloud_cover_low?.[currentHourIndex], '%', { precision: 0 }),
+            mid: weatherPresentation.formatWithUnits(hourly.cloud_cover_mid?.[currentHourIndex], '%', { precision: 0 }),
+            high: weatherPresentation.formatWithUnits(hourly.cloud_cover_high?.[currentHourIndex], '%', { precision: 0 })
         };
 
         // Visibility and fog data
         const visibility = {
-            current: hourly.visibility?.[0] ? 
-                this.weatherUtils.getVisibilityLevel(hourly.visibility[0]) : 
-                { level: 'Unknown', color: 'text-gray-400', description: 'Not available' },
-            fogRisk: hourly.dew_point_2m?.[0] && current.temperature_2m ? 
+            current: hourly.visibility?.[currentHourIndex] ? 
+                this.weatherUtils.getVisibilityLevel(hourly.visibility[currentHourIndex]) : 
+                { level: 'Unknown', color: 'text-neutral-500 dark:text-neutral-400', description: 'Not available' },
+            fogRisk: hourly.dew_point_2m?.[currentHourIndex] && current.temperature_2m ? 
                 this.weatherUtils.computeFogRisk(
                     current.temperature_2m,
-                    hourly.dew_point_2m[0],
+                    hourly.dew_point_2m[currentHourIndex],
                     current.cloud_cover,
                     current.wind_speed_10m,
-                    hourly.visibility?.[0] ?? 10000
+                    hourly.visibility?.[currentHourIndex] ?? 10000
                 ) : 'Unknown'
         };
 
@@ -249,7 +273,7 @@ export class WeatherDataAdapter {
             total: weatherPresentation.formatWithUnits(current.precipitation, ' mm', { precision: 1 }),
             rain: weatherPresentation.formatWithUnits(current.rain, ' mm', { precision: 1 }),
             snow: weatherPresentation.formatWithUnits(current.snowfall, ' mm', { precision: 1 }),
-            probability: weatherPresentation.formatWithUnits(hourly.precipitation_probability?.[0], '%', { precision: 0 })
+            probability: weatherPresentation.formatWithUnits(hourly.precipitation_probability?.[currentHourIndex], '%', { precision: 0 })
         };
 
         // Next 2 hours minutely data

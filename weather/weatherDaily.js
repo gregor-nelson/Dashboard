@@ -3,7 +3,7 @@ import { advancedWeather } from './weatherCore.js';
 
 export const dailyWeather = {
     id: 'daily-weather',
-    title: 'Daily Weather — Aberdeen',
+    title: 'Daily Weather',
     icon: 'ph-calendar',
     size: 'md:col-span-2',
     order: 6,
@@ -19,7 +19,7 @@ export const dailyWeather = {
     },
     render() {
         if (!this.deps.state.weatherData) {
-            this.contentEl.innerHTML = '<div class="text-center text-gray-300 py-8"><i class="ph ph-spinner text-2xl animate-spin mb-2"></i><p>Loading...</p></div>';
+            this.contentEl.innerHTML = '<div class="text-center text-neutral-500 dark:text-neutral-400 py-8"><i class="ph ph-spinner text-2xl animate-spin mb-2"></i><p>Loading...</p></div>';
             return;
         }
         advancedWeather.deps = this.deps;

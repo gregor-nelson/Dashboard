@@ -402,7 +402,7 @@ export const renderUtils = {
     
     renderValueWithMissing(data, key, index = 0, unit = '', missingText = 'Not available') {
         if (!data || !data[key]) {
-            return `<span class="text-orange-300">${missingText}</span>`;
+            return `<span class="text-orange-600 dark:text-orange-400">${missingText}</span>`;
         }
         const value = Array.isArray(data[key]) ? data[key][index] : data[key];
         if (value === null || value === undefined) {
@@ -499,7 +499,7 @@ function testHourlyRainProbRendering() {
         
         // Check for percentage values
         const hasPercentages = /%/.test(widget.innerHTML);
-        const hasProgressBars = widget.innerHTML.includes('bg-blue-400');
+        const hasProgressBars = widget.innerHTML.includes('bg-blue-500');
         
         return { 
             ok: true, 

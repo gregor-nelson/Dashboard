@@ -242,7 +242,7 @@ const services = {
                     'precipitation', 'rain', 'snowfall', 'weather_code',
                     'wind_gusts_10m', 'visibility', 'uv_index', 'shortwave_radiation_instant', 'is_day'
                 ].join(','),
-                forecast_minutely_15: 8 // 8 x 15-min steps = 2 hours
+                forecast_minutely_15: 288 // Get all available minutely data to find rain
             });
             
             const url = `${this.baseUrl}?${params}`;
@@ -376,12 +376,12 @@ const weatherUtils = {
     },
     
     getAirQualityLevel(aqi) {
-        if (aqi <= 20) return { level: 'Good', color: 'text-green-400', bg: 'bg-green-500' };
-        if (aqi <= 40) return { level: 'Fair', color: 'text-yellow-400', bg: 'bg-yellow-500' };
-        if (aqi <= 60) return { level: 'Moderate', color: 'text-orange-400', bg: 'bg-orange-500' };
-        if (aqi <= 80) return { level: 'Poor', color: 'text-red-400', bg: 'bg-red-500' };
-        if (aqi <= 100) return { level: 'Very Poor', color: 'text-purple-400', bg: 'bg-purple-500' };
-        return { level: 'Extremely Poor', color: 'text-red-600', bg: 'bg-red-600' };
+        if (aqi <= 20) return { level: 'Good', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-900' };
+        if (aqi <= 40) return { level: 'Fair', color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-100 dark:bg-yellow-900' };
+        if (aqi <= 60) return { level: 'Moderate', color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-100 dark:bg-orange-900' };
+        if (aqi <= 80) return { level: 'Poor', color: 'text-red-600 dark:text-red-400', bg: 'bg-red-100 dark:bg-red-900' };
+        if (aqi <= 100) return { level: 'Very Poor', color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-900' };
+        return { level: 'Extremely Poor', color: 'text-red-700 dark:text-red-300', bg: 'bg-red-200 dark:bg-red-800' };
     },
     
     formatTime(dateString) {
@@ -489,13 +489,13 @@ const weatherUtils = {
         let recommendation, color;
         if (score >= 2) {
             recommendation = 'Favorable';
-            color = 'text-green-400';
+            color = 'text-green-600 dark:text-green-400';
         } else if (score >= 0) {
             recommendation = 'Mixed';
-            color = 'text-yellow-400';
+            color = 'text-yellow-600 dark:text-yellow-400';
         } else {
             recommendation = 'Inside recommended';
-            color = 'text-red-400';
+            color = 'text-red-600 dark:text-red-400';
         }
 
         return { recommendation, color, factors, score };
@@ -555,25 +555,25 @@ const weatherUtils = {
     },
 
     getCapeLevel(cape) {
-        if (cape < 1000) return { level: 'Low', color: 'text-green-400', description: 'Stable atmosphere' };
-        if (cape < 2500) return { level: 'Moderate', color: 'text-yellow-400', description: 'Some instability' };
-        if (cape < 4000) return { level: 'High', color: 'text-orange-400', description: 'Very unstable' };
-        return { level: 'Extreme', color: 'text-red-400', description: 'Severe weather possible' };
+        if (cape < 1000) return { level: 'Low', color: 'text-green-600 dark:text-green-400', description: 'Stable atmosphere' };
+        if (cape < 2500) return { level: 'Moderate', color: 'text-yellow-600 dark:text-yellow-400', description: 'Some instability' };
+        if (cape < 4000) return { level: 'High', color: 'text-orange-600 dark:text-orange-400', description: 'Very unstable' };
+        return { level: 'Extreme', color: 'text-red-600 dark:text-red-400', description: 'Severe weather possible' };
     },
 
     getLiftedIndexLevel(li) {
-        if (li > 2) return { level: 'Stable', color: 'text-green-400', description: 'No thunderstorms expected' };
-        if (li > 0) return { level: 'Marginal', color: 'text-yellow-400', description: 'Isolated storms possible' };
-        if (li > -3) return { level: 'Unstable', color: 'text-orange-400', description: 'Scattered storms likely' };
-        return { level: 'Very unstable', color: 'text-red-400', description: 'Severe storms possible' };
+        if (li > 2) return { level: 'Stable', color: 'text-green-600 dark:text-green-400', description: 'No thunderstorms expected' };
+        if (li > 0) return { level: 'Marginal', color: 'text-yellow-600 dark:text-yellow-400', description: 'Isolated storms possible' };
+        if (li > -3) return { level: 'Unstable', color: 'text-orange-600 dark:text-orange-400', description: 'Scattered storms likely' };
+        return { level: 'Very unstable', color: 'text-red-600 dark:text-red-400', description: 'Severe storms possible' };
     },
 
     getVisibilityLevel(vis) {
-        if (vis >= 10000) return { level: 'Excellent', color: 'text-green-400', description: '10+ km' };
-        if (vis >= 5000) return { level: 'Good', color: 'text-blue-400', description: '5-10 km' };
-        if (vis >= 1000) return { level: 'Moderate', color: 'text-yellow-400', description: '1-5 km' };
-        if (vis >= 200) return { level: 'Poor', color: 'text-orange-400', description: '200m-1km' };
-        return { level: 'Very poor', color: 'text-red-400', description: '<200m' };
+        if (vis >= 10000) return { level: 'Excellent', color: 'text-green-600 dark:text-green-400', description: '10+ km' };
+        if (vis >= 5000) return { level: 'Good', color: 'text-blue-600 dark:text-blue-400', description: '5-10 km' };
+        if (vis >= 1000) return { level: 'Moderate', color: 'text-yellow-600 dark:text-yellow-400', description: '1-5 km' };
+        if (vis >= 200) return { level: 'Poor', color: 'text-orange-600 dark:text-orange-400', description: '200m-1km' };
+        return { level: 'Very poor', color: 'text-red-600 dark:text-red-400', description: '<200m' };
     },
     
     // Integrate render utilities from testing module
@@ -638,7 +638,7 @@ function copyToClipboard(text) {
 function showToast(message) {
     // Create toast element
     const toast = document.createElement('div');
-    toast.className = 'fixed top-4 right-4 glass-card rounded-lg px-4 py-2 text-white z-50 transform translate-x-full transition-transform duration-300';
+    toast.className = 'fixed top-4 right-4 bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-lg px-4 py-2 text-neutral-800 dark:text-neutral-100 z-50 transform translate-x-full transition-transform duration-300 shadow-lg';
     toast.textContent = message;
     
     document.body.appendChild(toast);
@@ -673,7 +673,7 @@ async function renderWidgets() {
     
     for (const widget of enabledWidgets) {
         const widgetElement = document.createElement('div');
-        widgetElement.className = `glass-card rounded-lg p-6 text-white ${widget.size || 'col-span-1'}`;
+        widgetElement.className = `p-6 text-neutral-800 dark:text-neutral-100 shadow-sm ${widget.size || 'col-span-1'}`;
         widgetElement.id = `widget-${widget.id}`;
         
         try {
@@ -691,7 +691,7 @@ async function renderWidgets() {
         } catch (error) {
             console.error(`Error rendering widget ${widget.id}:`, error);
             widgetElement.innerHTML = `
-                <div class="text-center text-red-300">
+                <div class="text-center text-red-600 dark:text-red-400">
                     <i class="ph ph-warning text-2xl mb-2"></i>
                     <p>Error loading ${widget.title}</p>
                 </div>
@@ -717,13 +717,13 @@ function renderSettings() {
         const toggle = document.createElement('div');
         toggle.className = 'flex justify-between items-center';
         toggle.innerHTML = `
-            <label class="text-sm font-medium flex items-center gap-2">
+            <label class="text-sm font-medium flex items-center gap-2 text-neutral-700 dark:text-neutral-200">
                 <i class="ph ${widget.icon} text-lg"></i>
                 ${widget.title}
             </label>
             <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" class="sr-only peer widget-toggle" data-widget="${id}" ${isEnabled ? 'checked' : ''}>
-                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div class="w-11 h-6 bg-neutral-300 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
             </label>
         `;
         togglesContainer.appendChild(toggle);
@@ -779,11 +779,10 @@ function renderSettings() {
 }
 
 function updateTheme() {
-    const body = document.body;
     if (state.settings.darkTheme) {
-        body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
+        document.documentElement.classList.add('dark');
     } else {
-        body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        document.documentElement.classList.remove('dark');
     }
 }
 
