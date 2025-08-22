@@ -879,10 +879,10 @@ export class MarineAnalysis {
         const isDarkMode = document.documentElement.classList.contains('dark');
 
         contentEl.innerHTML = `
-            <div class="space-y-4">
+            <div class="space-y-6">
                 <!-- Primary Wave Display -->
                 <div class="text-center">
-                    <i class="ph ph-waves text-5xl mb-3"></i>
+                    <i class="ph ph-waves text-blue-600 dark:text-blue-400 text-5xl mb-3"></i>
                     <div class="text-4xl font-bold mb-2">${waveHeight !== null && waveHeight !== undefined ? waveHeight.toFixed(1) + 'm' : 'N/A'}</div>
                     <div class="text-lg text-neutral-500 dark:text-neutral-400 mb-1">Significant Wave Height</div>
                     
@@ -909,10 +909,10 @@ export class MarineAnalysis {
 
                 <!-- Cross-Sea Warning (only for high severity) -->
                 ${crossSea && crossSea.isCrossSea && crossSea.severity === 'high' ? `
-                    <div class="p-4 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded-lg">
+                    <div class="p-3 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded-lg">
                         <div class="flex items-center gap-2 text-red-300 dark:text-red-400">
                             <i class="ph ph-warning text-lg"></i>
-                            <span class="font-semibold">Cross-Sea Warning</span>
+                            <span class="font-medium">Cross-Sea Warning</span>
                         </div>
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">
                             Dangerous wave patterns detected - exercise extreme caution
@@ -944,7 +944,7 @@ export class MarineAnalysis {
                             </div>
                         </div>
                         <div class="text-center p-3">
-                            <i class="ph ph-compass text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <i class="ph ph-compass text-yellow-600 dark:text-yellow-400 text-lg mb-1"></i>
                             <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Direction</div>
                             <div class="font-medium">
                                 ${waveDirection !== null && waveDirection !== undefined ? weatherUtils.getWindDirection(waveDirection) : 'N/A'}
@@ -954,7 +954,7 @@ export class MarineAnalysis {
                             </div>
                         </div>
                         <div class="text-center p-3">
-                            <i class="ph ph-clock text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <i class="ph ph-clock text-green-600 dark:text-green-400 text-lg mb-1"></i>
                             <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Period</div>
                             <div class="font-medium">
                                 ${wavePeriod !== null && wavePeriod !== undefined ? wavePeriod.toFixed(1) + 's' : 'N/A'}
@@ -973,7 +973,7 @@ export class MarineAnalysis {
                         ` : ''}
                     </div>
                 ` : waveComponents && waveComponents.error ? `
-                    <div class="p-4">
+                    <div class="p-3">
                         <div class="text-center text-neutral-500 dark:text-neutral-400">
                             <i class="ph ph-warning text-lg mb-2"></i>
                             <p class="text-sm">Wave component data unavailable</p>
@@ -983,9 +983,9 @@ export class MarineAnalysis {
 
                 <!-- Wave Forecast Charts -->
                 ${hourlyData ? `
-                    <div class="p-4">
+                    <div class="p-3">
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Wave Forecast</h4>
+                            <h4 class="text-sm font-medium text-neutral-800 dark:text-neutral-200">Wave Forecast</h4>
                             <div class="flex gap-2">
                                 <button class="time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors bg-neutral-800 text-neutral-100 dark:bg-neutral-200 dark:text-neutral-800" data-range="12">12h</button>
                                 <button class="time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors text-neutral-500 dark:text-neutral-400" data-range="24">24h</button>
@@ -1001,68 +1001,100 @@ export class MarineAnalysis {
                     ${this.renderDirectionEvolution(hourlyData, currentTimeRange, isDarkMode)}
                 ` : ''}
 
-                <!-- Wave Details Grid -->
-                <div class="p-4">
-                    <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">Wave Details</h4>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
+                <!-- Current Wave Details -->
+                <div>
+                    <h4 class="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-4">Current Wave Details</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div class="text-center p-3">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Direction</div>
-                            <div class="font-semibold text-neutral-800 dark:text-neutral-100">
-                                ${waveDirection !== null && waveDirection !== undefined ? weatherUtils.getWindDirection(waveDirection) : 'N/A'}
+                            <i class="ph ph-waves text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Swell Direction</div>
+                            <div class="font-medium">
+                                ${current.swell_wave_direction !== null && current.swell_wave_direction !== undefined ? weatherUtils.getWindDirection(current.swell_wave_direction) : 'N/A'}
                             </div>
                             <div class="text-xs text-neutral-500 dark:text-neutral-400">
-                                ${waveDirection !== null && waveDirection !== undefined ? Math.round(waveDirection) + '°' : 'N/A'}
+                                ${current.swell_wave_direction !== null && current.swell_wave_direction !== undefined ? Math.round(current.swell_wave_direction) + '°' : ''}
                             </div>
                         </div>
                         <div class="text-center p-3">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Period</div>
-                            <div class="font-semibold text-neutral-800 dark:text-neutral-100">
+                            <i class="ph ph-clock text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Swell Period</div>
+                            <div class="font-medium">
+                                ${current.swell_wave_period !== null && current.swell_wave_period !== undefined ? current.swell_wave_period.toFixed(1) + 's' : 'N/A'}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-wind text-orange-600 dark:text-orange-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Dir</div>
+                            <div class="font-medium">
+                                ${windWaveDirection !== null && windWaveDirection !== undefined ? weatherUtils.getWindDirection(windWaveDirection) : 'N/A'}
+                            </div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                ${windWaveDirection !== null && windWaveDirection !== undefined ? Math.round(windWaveDirection) + '°' : ''}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-timer text-orange-600 dark:text-orange-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Period</div>
+                            <div class="font-medium">
+                                ${current.wind_wave_period !== null && current.wind_wave_period !== undefined ? current.wind_wave_period.toFixed(1) + 's' : 'N/A'}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-compass text-yellow-600 dark:text-yellow-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Overall Direction</div>
+                            <div class="font-medium">
+                                ${waveDirection !== null && waveDirection !== undefined ? weatherUtils.getWindDirection(waveDirection) : 'N/A'}
+                            </div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                ${waveDirection !== null && waveDirection !== undefined ? Math.round(waveDirection) + '°' : ''}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-clock text-green-600 dark:text-green-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Overall Period</div>
+                            <div class="font-medium">
                                 ${wavePeriod !== null && wavePeriod !== undefined ? wavePeriod.toFixed(1) + 's' : 'N/A'}
                             </div>
                             ${periodInfo && !periodInfo.error && wavePeriod !== null && wavePeriod !== undefined ? `
                                 <div class="text-xs text-neutral-500 dark:text-neutral-400">${periodInfo.description}</div>
                             ` : ''}
                         </div>
-                        ${crossSea && !crossSea.isCrossSea ? `
-                            <div class="text-center p-3">
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Dir</div>
-                                <div class="font-semibold text-neutral-800 dark:text-neutral-100">
-                                    ${windWaveDirection !== null && windWaveDirection !== undefined ? weatherUtils.getWindDirection(windWaveDirection) : 'N/A'}
-                                </div>
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400">
-                                    ${windWaveDirection !== null && windWaveDirection !== undefined ? Math.round(windWaveDirection) + '°' : 'N/A'}
-                                </div>
-                            </div>
-                            <div class="text-center p-3">
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Period</div>
-                                <div class="font-semibold text-neutral-800 dark:text-neutral-100">
-                                    ${current.wind_wave_period !== null && current.wind_wave_period !== undefined ? current.wind_wave_period.toFixed(1) + 's' : 'N/A'}
-                                </div>
-                            </div>
-                        ` : ''}
                     </div>
+                </div>
                     
                     ${periodInfo && !periodInfo.error || (crossSea && crossSea.isCrossSea && crossSea.severity !== 'high') ? `
-                        <div class="mt-3 pt-3 text-center">
-                            <div class="flex items-center justify-center gap-2 text-xs flex-wrap">
-                                ${periodInfo && !periodInfo.error ? `
-                                    <span class="text-neutral-600 dark:text-neutral-300">Wave Type:</span>
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs border bg-neutral-50 text-neutral-700 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-600">
-                                        ${periodInfo.description}
-                                    </span>
-                                    ${periodInfo.comfort ? `
-                                        <span class="text-neutral-500 dark:text-neutral-400">•</span>
-                                        <span class="text-neutral-600 dark:text-neutral-300">${periodInfo.comfort.replace('-', ' ')}</span>
-                                    ` : ''}
-                                ` : ''}
-                                ${crossSea && crossSea.isCrossSea && crossSea.severity !== 'high' ? `
-                                    ${periodInfo && !periodInfo.error ? `<span class="text-neutral-500 dark:text-neutral-400">•</span>` : ''}
-                                    <span class="text-neutral-600 dark:text-neutral-300">Cross-Sea:</span>
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs border ${crossSea.severity === 'moderate' ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-700' : 'bg-neutral-50 text-neutral-700 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-600'}">
-                                        ${crossSea.angleDifference}° ${crossSea.severity}
-                                    </span>
-                                ` : ''}
-                            </div>
+                        <div class="mt-6 space-y-3">
+                            ${periodInfo && !periodInfo.error ? `
+                                <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ph ph-wave-sine text-blue-600 dark:text-blue-400"></i>
+                                        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Wave Type</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-700">
+                                            ${periodInfo.description}
+                                        </span>
+                                        ${periodInfo.comfort ? `
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm border ${periodInfo.comfort.includes('comfortable') ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700' : 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-700'}">
+                                                ${periodInfo.comfort.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            ${crossSea && crossSea.isCrossSea && crossSea.severity !== 'high' ? `
+                                <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ph ph-intersect text-amber-600 dark:text-amber-400"></i>
+                                        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Cross-Sea</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border ${crossSea.severity === 'moderate' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-700' : 'bg-neutral-50 text-neutral-700 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-600'}">
+                                            ${crossSea.angleDifference}° ${crossSea.severity}
+                                        </span>
+                                    </div>
+                                </div>
+                            ` : ''}
                         </div>
                     ` : ''}
                 </div>
@@ -1074,41 +1106,49 @@ export class MarineAnalysis {
                             <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Technical Analysis</span>
                             <i class="ph ph-caret-down text-neutral-500 dark:text-neutral-400 group-open:rotate-180 transition-transform"></i>
                         </summary>
-                        <div class="mt-2 p-4 space-y-3">
+                        <div class="mt-2 space-y-3">
                             ${waveComponents && waveComponents.dataAvailable ? `
-                                <div class="text-xs">
-                                    <span class="font-medium text-neutral-700 dark:text-neutral-200">Data Source:</span>
-                                    <span class="ml-1 text-neutral-600 dark:text-neutral-300">Direct API measurements</span>
+                                <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ph ph-database text-green-600 dark:text-green-400"></i>
+                                        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Data Source</span>
+                                    </div>
+                                    <div>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm border bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700">
+                                            Direct API measurements
+                                        </span>
+                                    </div>
                                 </div>
                             ` : ''}
                             
                             ${waveTrend && waveTrend.dataPoints ? `
-                                <div class="text-xs">
-                                    <span class="font-medium text-neutral-700 dark:text-neutral-200">Trend Analysis:</span>
-                                    <span class="ml-1 text-neutral-600 dark:text-neutral-300">${waveTrend.dataPoints} data points over ${waveTrend.period}</span>
+                                <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ph ph-trend-up text-blue-600 dark:text-blue-400"></i>
+                                        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Trend Analysis</span>
+                                    </div>
+                                    <div>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm border bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-700">
+                                            ${waveTrend.dataPoints} data points over ${waveTrend.period}
+                                        </span>
+                                    </div>
                                 </div>
                             ` : ''}
                             
                             ${periodInfo && !periodInfo.error && periodInfo.wmoCategory ? `
-                                <div class="text-xs">
-                                    <span class="font-medium text-neutral-700 dark:text-neutral-200">Wave Classification:</span>
-                                    <span class="ml-1 text-neutral-600 dark:text-neutral-300">${periodInfo.wmoCategory}</span>
+                                <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ph ph-waves text-purple-600 dark:text-purple-400"></i>
+                                        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Wave Classification</span>
+                                    </div>
+                                    <div>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm border bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-700">
+                                            ${periodInfo.wmoCategory}
+                                        </span>
+                                    </div>
                                 </div>
                             ` : ''}
                             
-                            ${current.swell_wave_direction !== null && current.swell_wave_direction !== undefined ? `
-                                <div class="text-xs">
-                                    <span class="font-medium text-neutral-700 dark:text-neutral-200">Swell Direction:</span>
-                                    <span class="ml-1 text-neutral-600 dark:text-neutral-300">${weatherUtils.getWindDirection(current.swell_wave_direction)} (${Math.round(current.swell_wave_direction)}°)</span>
-                                </div>
-                            ` : ''}
-                            
-                            ${current.swell_wave_period !== null && current.swell_wave_period !== undefined ? `
-                                <div class="text-xs">
-                                    <span class="font-medium text-neutral-700 dark:text-neutral-200">Swell Period:</span>
-                                    <span class="ml-1 text-neutral-600 dark:text-neutral-300">${current.swell_wave_period.toFixed(1)}s</span>
-                                </div>
-                            ` : ''}
                         </div>
                     </details>
                 </div>
