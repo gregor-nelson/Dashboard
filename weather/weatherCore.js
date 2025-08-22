@@ -1797,7 +1797,13 @@ export const advancedWeather = {
                     <div class="p-3">
                         <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Past ${validDays.length} Days Temperature Range</div>
                         <div class="space-y-1">
-                            ${validDays.map((day) => {
+                            ${(() => {
+                                // Calculate global temperature range for dynamic bar positioning
+                                const globalMin = Math.min(...validDays.map(day => day.minTemp));
+                                const globalMax = Math.max(...validDays.map(day => day.maxTemp));
+                                const tempSpan = globalMax - globalMin;
+                                
+                                return validDays.map((day) => {
                                 const date = new Date(day.date);
                                 const today = new Date();
                                 const yesterday = new Date(today);
@@ -1807,18 +1813,24 @@ export const advancedWeather = {
                                 const dayLabel = isYesterday ? 'Yesterday' : 
                                                date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
                                 
+                                // Calculate dynamic positioning for this day's temperature range
+                                const minPosition = tempSpan > 0 ? ((day.minTemp - globalMin) / tempSpan) * 100 : 0;
+                                const maxPosition = tempSpan > 0 ? ((day.maxTemp - globalMin) / tempSpan) * 100 : 100;
+                                const barWidth = maxPosition - minPosition;
+                                
                                 return `
                                     <div class="flex items-center justify-between py-1">
                                         <span class="text-xs w-16">${dayLabel}</span>
                                         <div class="flex-1 mx-2 h-1 bg-neutral-300 dark:bg-neutral-600 rounded relative">
-                                            <div class="absolute h-full bg-blue-500 dark:bg-blue-400 rounded" style="width: 50%; left: 25%"></div>
+                                            <div class="absolute h-full bg-blue-500 dark:bg-blue-400 rounded" style="width: ${barWidth}%; left: ${minPosition}%"></div>
                                         </div>
                                         <span class="text-xs text-neutral-500 dark:text-neutral-400 w-16 text-right">
                                             ${Math.round(day.minTemp)}° / ${Math.round(day.maxTemp)}°
                                         </span>
                                     </div>
                                 `;
-                            }).join('')}
+                                }).join('');
+                            })()}
                         </div>
                     </div>
                     
