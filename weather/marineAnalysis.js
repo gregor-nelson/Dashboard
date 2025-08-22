@@ -202,6 +202,15 @@ export class MarineAnalysis {
         return squaredDiffs.reduce((sum, val) => sum + val, 0) / (values.length - 1);
     }
 
+    getDirectionLabel(degrees) {
+        if (degrees === null || degrees === undefined || isNaN(degrees)) return 'N/A';
+        
+        const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 
+                          'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+        const index = Math.round((degrees % 360) / 22.5) % 16;
+        return directions[index];
+    }
+
     categorizeWavePeriod(period, latitude = null) {
         if (!period || period <= 0) return { error: 'INVALID_PERIOD', message: 'Wave period must be positive' };
 
@@ -753,70 +762,228 @@ export class MarineAnalysis {
 
     renderDirectionEvolution(hourlyData, timeRange = 48, isDarkMode = false) {
         if (!hourlyData || hourlyData.length === 0) {
-            return '<div class="text-center text-neutral-500 dark:text-neutral-400 py-4 text-sm">No direction data available</div>';
+            return '<div class="text-center text-neutral-500 dark:text-neutral-400 py-6 text-sm">No direction data available</div>';
         }
 
         const dataToShow = hourlyData.slice(0, timeRange);
-        const containerWidth = 100; // Percentage
-        const arrowSpacing = containerWidth / dataToShow.length;
-
         let directionIndicators = '';
         
-        for (let i = 0; i < dataToShow.length; i += 3) { // Show every 3rd indicator to avoid crowding
+        for (let i = 0; i < dataToShow.length; i += 3) {
             const data = dataToShow[i];
-            const leftPosition = (i * arrowSpacing);
+            const leftPercent = (i / dataToShow.length) * 100;
             
             const waveDir = data.wave_direction;
             const windWaveDir = data.wind_wave_direction;
             const swellDir = data.swell_wave_direction;
+            const waveHeight = data.wave_height || 0;
+            const windWaveHeight = data.wind_wave_height || 0;
+            const swellWaveHeight = data.swell_wave_height || 0;
             
-            // Main wave direction (most important)
-            if (waveDir !== null && waveDir !== undefined) {
-                const rotation = waveDir + 180; // Point in direction waves are traveling TO
-                directionIndicators += `
-                    <div class="absolute flex flex-col items-center" style="left: ${leftPosition}%;">
-                        <div class="w-4 h-4 rounded-full bg-blue-500 dark:bg-blue-400 opacity-30 flex items-center justify-center mb-1">
-                            <div class="transform" style="transform: rotate(${rotation}deg);">
-                                <i class="ph-fill ph-caret-up text-xs text-blue-700 dark:text-blue-300"></i>
-                            </div>
+            // Enhanced arrow creation with refined visual hierarchy
+            const createArrow = (direction, waveType, height, yOffset = 0, showLabel = false, timeStr = null) => {
+                if (direction === null || direction === undefined) return '';
+                
+                const rotation = direction + 180;
+                
+                // Increased arrow proportions for better visibility at default zoom
+                const baseLength = waveType === 'main' ? 34 : 28;
+                const length = Math.max(baseLength, Math.min(baseLength * 2, baseLength + (height * 6)));
+                
+                // Enhanced color hierarchy for better visual emphasis
+                const styles = {
+                    main: { 
+                        color: '#7C3AED', 
+                        stroke: '3.5', 
+                        opacity: '1', 
+                        name: 'Total',
+                        headSize: '22,6 17,16 22,13 27,16' 
+                    },
+                    swell: { 
+                        color: '#2563EB', 
+                        stroke: '2.5', 
+                        opacity: '0.85', 
+                        name: 'Swell',
+                        headSize: '22,8 19,14 22,12 25,14'
+                    },
+                    wind: { 
+                        color: '#16A34A', 
+                        stroke: '2.5', 
+                        opacity: '0.8', 
+                        name: 'Wind',
+                        headSize: '22,8 19,14 22,12 25,14'
+                    }
+                };
+                
+                const style = styles[waveType];
+                
+                return `
+                    <div class="absolute group" style="left: ${leftPercent}%; top: ${14 + yOffset}px;">
+                        <!-- Enhanced arrow container with better hover area -->
+                        <div class="w-12 h-12 -translate-x-1/2 cursor-pointer flex items-center justify-center transition-all duration-150 hover:scale-110"
+                             style="transform: translateX(-50%) rotate(${rotation}deg);">
+                            <svg width="44" height="${length + 16}" viewBox="0 0 44 ${length + 16}" class="overflow-visible">
+                                <!-- Refined arrow shaft with subtle glow effect -->
+                                <defs>
+                                    <filter id="glow-${waveType}" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="${style.color}" flood-opacity="0.3"/>
+                                    </filter>
+                                </defs>
+                                <line x1="22" y1="12" x2="22" y2="${length + 4}" 
+                                      stroke="${style.color}" 
+                                      stroke-width="${style.stroke}" 
+                                      opacity="${style.opacity}"
+                                      stroke-linecap="round"
+                                      filter="url(#glow-${waveType})" />
+                                <!-- Refined arrow head with better proportions -->
+                                <polygon points="${style.headSize}" 
+                                         fill="${style.color}" 
+                                         opacity="${style.opacity}"
+                                         filter="url(#glow-${waveType})" />
+                            </svg>
                         </div>
-                        <div class="text-xs text-neutral-600 dark:text-neutral-400">
-                            ${Math.round(waveDir)}°
+                        
+                        ${showLabel ? `
+                            <div class="absolute -translate-x-1/2 pointer-events-none" style="top: ${length + 22}px; left: 50%;">
+                                <div class="text-xs text-neutral-700 dark:text-neutral-300 text-center font-semibold">
+                                    ${this.getDirectionLabel(direction)}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Enhanced tooltip with time information -->
+                        <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out pointer-events-none z-40
+                                    -translate-x-1/2 transform" style="top: ${length + 32}px; left: 50%;">
+                            <div class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-600 
+                                        text-neutral-800 dark:text-neutral-100 text-xs px-3 py-2.5 rounded-lg shadow-xl 
+                                        whitespace-nowrap backdrop-blur-sm">
+                                ${timeStr ? `<div class="text-neutral-500 dark:text-neutral-400 text-xs mb-1 font-mono">${timeStr}</div>` : ''}
+                                <div class="font-semibold text-sm mb-0.5">${Math.round(direction)}° ${this.getDirectionLabel(direction)}</div>
+                                <div class="text-neutral-600 dark:text-neutral-400 text-xs">${height.toFixed(1)}m ${style.name} Wave</div>
+                            </div>
+                            <!-- Refined tooltip arrow -->
+                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 
+                                        border-l-[6px] border-r-[6px] border-b-[6px] border-transparent 
+                                        border-b-white dark:border-b-neutral-800"></div>
                         </div>
                     </div>
                 `;
+            };
+            
+            // Get time string for tooltips
+            const timeStr = data.timestamp ? new Date(data.timestamp) : new Date(now.getTime() + (i * 60 * 60 * 1000));
+            const tooltipTime = timeStr.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            // Refined layering with better spacing
+            let currentOffset = 0;
+            
+            // Primary: Total wave (emphasized with stronger visual treatment)
+            if (waveDir !== null && waveDir !== undefined) {
+                directionIndicators += createArrow(waveDir, 'main', waveHeight, currentOffset, true, tooltipTime);
+                currentOffset += 14;
             }
             
-            // Wind wave direction (if significantly different)
+            // Secondary: Swell direction (refined threshold for cleaner display)
+            if (swellDir !== null && swellDir !== undefined && 
+                waveDir !== null && Math.abs(swellDir - waveDir) > 30) {
+                directionIndicators += createArrow(swellDir, 'swell', swellWaveHeight, currentOffset, false, tooltipTime);
+                currentOffset += 12;
+            }
+            
+            // Tertiary: Wind wave direction (refined threshold)
             if (windWaveDir !== null && windWaveDir !== undefined && 
-                waveDir !== null && Math.abs(windWaveDir - waveDir) > 20) {
-                const rotation = windWaveDir + 180;
-                directionIndicators += `
-                    <div class="absolute flex flex-col items-center" style="left: ${leftPosition + 1}%;">
-                        <div class="w-3 h-3 rounded-full bg-orange-500 dark:bg-orange-400 opacity-40 flex items-center justify-center mb-1">
-                            <div class="transform" style="transform: rotate(${rotation}deg);">
-                                <i class="ph-fill ph-caret-up text-xs text-orange-700 dark:text-orange-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                waveDir !== null && Math.abs(windWaveDir - waveDir) > 30) {
+                directionIndicators += createArrow(windWaveDir, 'wind', windWaveHeight, currentOffset, false, tooltipTime);
             }
         }
 
+        // Enhanced time axis with better visual hierarchy
+        let timeMarkers = '';
+        const now = new Date();
+        for (let i = 0; i < dataToShow.length; i += 6) {
+            const data = dataToShow[i];
+            const leftPercent = (i / dataToShow.length) * 100;
+            const timeStr = data.timestamp ? new Date(data.timestamp) : new Date(now.getTime() + (i * 60 * 60 * 1000));
+            
+            // Ultra minimal time formatting
+            const timeOnly = timeStr.getHours().toString().padStart(2, '0');
+            
+            timeMarkers += `
+                <div class="absolute -translate-x-1/2 text-center pointer-events-none" style="left: ${leftPercent}%; top: 0;">
+                    <!-- Ultra minimal time label -->
+                    <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
+                        ${timeOnly}
+                    </div>
+                </div>
+            `;
+        }
+
         return `
-            <div class="p-4 mt-4">
-                <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">Wave Direction Evolution</h4>
-                <div class="relative h-16">
+            <div class="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-5 mt-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <h4 class="text-base font-semibold text-neutral-800 dark:text-neutral-100">
+                        Wave Direction Evolution
+                    </h4>
+                </div>
+                
+                <!-- Enhanced container with better spacing -->
+                <div class="relative" style="height: 120px; overflow: visible;">
                     ${directionIndicators}
                 </div>
-                <div class="flex items-center justify-center gap-4 mt-3 text-xs">
-                    <div class="flex items-center gap-1">
-                        <div class="w-4 h-4 bg-blue-500 rounded-full opacity-30"></div>
-                        <span class="text-neutral-600 dark:text-neutral-300">Total Wave</span>
+                
+                <!-- Ultra minimal time axis -->
+                <div class="relative mb-5" style="height: 18px;">
+                    ${timeMarkers}
+                </div>
+                
+                <!-- Enhanced legend with matching arrow designs -->
+                <div class="flex items-center justify-center gap-6 text-sm pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                    <div class="flex items-center gap-2.5">
+                        <svg width="26" height="20" viewBox="0 0 26 20" class="flex-shrink-0">
+                            <defs>
+                                <filter id="legend-glow-main" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#7C3AED" flood-opacity="0.3"/>
+                                </filter>
+                            </defs>
+                            <line x1="13" y1="18" x2="13" y2="8" stroke="#7C3AED" stroke-width="3.5" 
+                                  stroke-linecap="round" filter="url(#legend-glow-main)" />
+                            <polygon points="13,4 9,10 13,8 17,10" fill="#7C3AED" filter="url(#legend-glow-main)" />
+                        </svg>
+                        <span class="text-neutral-700 dark:text-neutral-200 font-semibold">Total Wave</span>
                     </div>
-                    <div class="flex items-center gap-1">
-                        <div class="w-3 h-3 bg-orange-500 rounded-full opacity-40"></div>
-                        <span class="text-neutral-600 dark:text-neutral-300">Wind Wave</span>
+                    <div class="flex items-center gap-2.5">
+                        <svg width="24" height="20" viewBox="0 0 24 20" class="flex-shrink-0">
+                            <defs>
+                                <filter id="legend-glow-swell" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#2563EB" flood-opacity="0.3"/>
+                                </filter>
+                            </defs>
+                            <line x1="12" y1="18" x2="12" y2="9" stroke="#2563EB" stroke-width="2.5" 
+                                  stroke-linecap="round" opacity="0.85" filter="url(#legend-glow-swell)" />
+                            <polygon points="12,6 10,11 12,9.5 14,11" fill="#2563EB" opacity="0.85" filter="url(#legend-glow-swell)" />
+                        </svg>
+                        <span class="text-neutral-600 dark:text-neutral-300 font-medium">Swell</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <svg width="24" height="20" viewBox="0 0 24 20" class="flex-shrink-0">
+                            <defs>
+                                <filter id="legend-glow-wind" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#16A34A" flood-opacity="0.3"/>
+                                </filter>
+                            </defs>
+                            <line x1="12" y1="18" x2="12" y2="9" stroke="#16A34A" stroke-width="2.5" 
+                                  stroke-linecap="round" opacity="0.8" filter="url(#legend-glow-wind)" />
+                            <polygon points="12,6 10,11 12,9.5 14,11" fill="#16A34A" opacity="0.8" filter="url(#legend-glow-wind)" />
+                        </svg>
+                        <span class="text-neutral-600 dark:text-neutral-300 font-medium">Wind Wave</span>
                     </div>
                 </div>
             </div>
