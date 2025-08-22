@@ -816,51 +816,56 @@ export class MarineAnalysis {
                 
                 const style = styles[waveType];
                 
+                // Calculate responsive positioning using Tailwind classes
+                const leftClass = `left-[${leftPercent}%]`;
+                const topClass = `top-[${14 + yOffset}px]`;
+                
                 return `
-                    <div class="absolute group" style="left: ${leftPercent}%; top: ${14 + yOffset}px;">
-                        <!-- Enhanced arrow container with better hover area -->
-                        <div class="w-12 h-12 -translate-x-1/2 cursor-pointer flex items-center justify-center transition-all duration-150 hover:scale-110"
+                    <div class="absolute group ${leftClass} ${topClass}">
+                        <!-- Mobile-responsive arrow container -->
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 -translate-x-1/2 cursor-pointer flex items-center justify-center transition-all duration-150 hover:scale-110"
                              style="transform: translateX(-50%) rotate(${rotation}deg);">
-                            <svg width="44" height="${length + 16}" viewBox="0 0 44 ${length + 16}" class="overflow-visible">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 overflow-visible" 
+                                 viewBox="0 0 44 ${length + 16}">
                                 <!-- Refined arrow shaft with subtle glow effect -->
                                 <defs>
-                                    <filter id="glow-${waveType}" x="-50%" y="-50%" width="200%" height="200%">
+                                    <filter id="glow-${waveType}-${i}" x="-50%" y="-50%" width="200%" height="200%">
                                         <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="${style.color}" flood-opacity="0.3"/>
                                     </filter>
                                 </defs>
                                 <line x1="22" y1="12" x2="22" y2="${length + 4}" 
                                       stroke="${style.color}" 
-                                      stroke-width="${style.stroke}" 
+                                      stroke-width="${waveType === 'main' ? '3.5' : '2.5'}" 
                                       opacity="${style.opacity}"
                                       stroke-linecap="round"
-                                      filter="url(#glow-${waveType})" />
-                                <!-- Refined arrow head with better proportions -->
+                                      filter="url(#glow-${waveType}-${i})" />
+                                <!-- Responsive arrow head -->
                                 <polygon points="${style.headSize}" 
                                          fill="${style.color}" 
                                          opacity="${style.opacity}"
-                                         filter="url(#glow-${waveType})" />
+                                         filter="url(#glow-${waveType}-${i})" />
                             </svg>
                         </div>
                         
                         ${showLabel ? `
-                            <div class="absolute -translate-x-1/2 pointer-events-none" style="top: ${length + 22}px; left: 50%;">
-                                <div class="text-xs text-neutral-700 dark:text-neutral-300 text-center font-semibold">
+                            <div class="absolute left-1/2 -translate-x-1/2 pointer-events-none top-[${length + 22}px]">
+                                <div class="text-xs text-neutral-700 dark:text-neutral-300 text-center font-semibold hidden sm:block">
                                     ${this.getDirectionLabel(direction)}
                                 </div>
                             </div>
                         ` : ''}
                         
-                        <!-- Enhanced tooltip with time information -->
-                        <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out pointer-events-none z-40
-                                    -translate-x-1/2 transform" style="top: ${length + 32}px; left: 50%;">
+                        <!-- Mobile-optimized tooltip -->
+                        <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out pointer-events-none z-50
+                                    left-1/2 -translate-x-1/2 top-[${length + 32}px]">
                             <div class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-600 
-                                        text-neutral-800 dark:text-neutral-100 text-xs px-3 py-2.5 rounded-lg shadow-xl 
-                                        whitespace-nowrap backdrop-blur-sm">
-                                ${timeStr ? `<div class="text-neutral-500 dark:text-neutral-400 text-xs mb-1 font-mono">${timeStr}</div>` : ''}
-                                <div class="font-semibold text-sm mb-0.5">${Math.round(direction)}° ${this.getDirectionLabel(direction)}</div>
-                                <div class="text-neutral-600 dark:text-neutral-400 text-xs">${height.toFixed(1)}m ${style.name} Wave</div>
+                                        text-neutral-800 dark:text-neutral-100 text-xs px-2 py-2 sm:px-3 sm:py-2.5 rounded-lg shadow-xl 
+                                        whitespace-nowrap backdrop-blur-sm max-w-[90vw] sm:max-w-none">
+                                ${timeStr ? `<div class="text-neutral-500 dark:text-neutral-400 text-xs mb-1 font-mono truncate">${timeStr}</div>` : ''}
+                                <div class="font-semibold text-sm mb-0.5 truncate">${Math.round(direction)}° ${this.getDirectionLabel(direction)}</div>
+                                <div class="text-neutral-600 dark:text-neutral-400 text-xs truncate">${height.toFixed(1)}m ${style.name} Wave</div>
                             </div>
-                            <!-- Refined tooltip arrow -->
+                            <!-- Responsive tooltip arrow -->
                             <div class="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 
                                         border-l-[6px] border-r-[6px] border-b-[6px] border-transparent 
                                         border-b-white dark:border-b-neutral-800"></div>
@@ -914,9 +919,9 @@ export class MarineAnalysis {
             const timeOnly = timeStr.getHours().toString().padStart(2, '0');
             
             timeMarkers += `
-                <div class="absolute -translate-x-1/2 text-center pointer-events-none" style="left: ${leftPercent}%; top: 0;">
+                <div class="absolute left-[${leftPercent}%] top-0 -translate-x-1/2 text-center pointer-events-none">
                     <!-- Ultra minimal time label -->
-                    <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
+                    <div class="text-xs sm:text-xs text-neutral-400 dark:text-neutral-500 font-mono">
                         ${timeOnly}
                     </div>
                 </div>
@@ -924,30 +929,30 @@ export class MarineAnalysis {
         }
 
         return `
-            <div class="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-5 mt-6">
-                <div class="flex items-center gap-2 mb-4">
+            <div class="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-3 sm:p-4 md:p-5 mt-4 sm:mt-6">
+                <div class="flex items-center gap-2 mb-3 sm:mb-4">
                     <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
-                    <h4 class="text-base font-semibold text-neutral-800 dark:text-neutral-100">
+                    <h4 class="text-sm sm:text-base font-semibold text-neutral-800 dark:text-neutral-100">
                         Wave Direction Evolution
                     </h4>
                 </div>
                 
-                <!-- Enhanced container with better spacing -->
-                <div class="relative" style="height: 120px; overflow: visible;">
+                <!-- Mobile-responsive container -->
+                <div class="relative h-24 sm:h-28 md:h-32 overflow-visible">
                     ${directionIndicators}
                 </div>
                 
                 <!-- Ultra minimal time axis -->
-                <div class="relative mb-5" style="height: 18px;">
+                <div class="relative mb-5 h-5">
                     ${timeMarkers}
                 </div>
                 
-                <!-- Enhanced legend with matching arrow designs -->
-                <div class="flex items-center justify-center gap-6 text-sm pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                    <div class="flex items-center gap-2.5">
-                        <svg width="26" height="20" viewBox="0 0 26 20" class="flex-shrink-0">
+                <!-- Mobile-responsive legend -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-5 sm:w-7 sm:h-5 flex-shrink-0" viewBox="0 0 26 20">
                             <defs>
                                 <filter id="legend-glow-main" x="-50%" y="-50%" width="200%" height="200%">
                                     <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#7C3AED" flood-opacity="0.3"/>
@@ -959,8 +964,8 @@ export class MarineAnalysis {
                         </svg>
                         <span class="text-neutral-700 dark:text-neutral-200 font-semibold">Total Wave</span>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <svg width="24" height="20" viewBox="0 0 24 20" class="flex-shrink-0">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-5 flex-shrink-0" viewBox="0 0 24 20">
                             <defs>
                                 <filter id="legend-glow-swell" x="-50%" y="-50%" width="200%" height="200%">
                                     <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#2563EB" flood-opacity="0.3"/>
@@ -972,8 +977,8 @@ export class MarineAnalysis {
                         </svg>
                         <span class="text-neutral-600 dark:text-neutral-300 font-medium">Swell</span>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <svg width="24" height="20" viewBox="0 0 24 20" class="flex-shrink-0">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-5 flex-shrink-0" viewBox="0 0 24 20">
                             <defs>
                                 <filter id="legend-glow-wind" x="-50%" y="-50%" width="200%" height="200%">
                                     <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#16A34A" flood-opacity="0.3"/>
