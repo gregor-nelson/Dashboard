@@ -301,14 +301,14 @@ const weatherUtils = {
         0: { icon: 'ph-sun', label: 'Clear sky' },
         1: { icon: 'ph-cloud-sun', label: 'Mainly clear' },
         2: { icon: 'ph-cloud', label: 'Partly cloudy' },
-        3: { icon: 'ph-clouds', label: 'Overcast' },
+        3: { icon: 'ph-cloud', label: 'Overcast' },
         45: { icon: 'ph-cloud-fog', label: 'Fog' },
         48: { icon: 'ph-cloud-fog', label: 'Depositing rime fog' },
-        51: { icon: 'ph-cloud-drizzle', label: 'Light drizzle' },
-        53: { icon: 'ph-cloud-drizzle', label: 'Moderate drizzle' },
-        55: { icon: 'ph-cloud-drizzle', label: 'Dense drizzle' },
-        56: { icon: 'ph-cloud-drizzle', label: 'Freezing drizzle' },
-        57: { icon: 'ph-cloud-drizzle', label: 'Dense freezing drizzle' },
+        51: { icon: 'ph-cloud-rain', label: 'Light drizzle' },
+        53: { icon: 'ph-cloud-rain', label: 'Moderate drizzle' },
+        55: { icon: 'ph-cloud-rain', label: 'Dense drizzle' },
+        56: { icon: 'ph-cloud-rain', label: 'Freezing drizzle' },
+        57: { icon: 'ph-cloud-rain', label: 'Dense freezing drizzle' },
         61: { icon: 'ph-cloud-rain', label: 'Light rain' },
         63: { icon: 'ph-cloud-rain', label: 'Moderate rain' },
         65: { icon: 'ph-cloud-rain', label: 'Heavy rain' },
@@ -673,7 +673,7 @@ async function renderWidgets() {
     
     for (const widget of enabledWidgets) {
         const widgetElement = document.createElement('div');
-        widgetElement.className = `p-6 text-neutral-800 dark:text-neutral-100 shadow-sm ${widget.size || 'col-span-1'}`;
+        widgetElement.className = `md:p-6 text-neutral-800 dark:text-neutral-100 shadow-sm ${widget.size || 'col-span-1'}`;
         widgetElement.id = `widget-${widget.id}`;
         
         try {

@@ -1258,6 +1258,9 @@ export const advancedWeather = {
             const utils = this.deps.utils.weatherUtils;
             const speedUnit = units === 'metric' ? ' km/h' : ' mph';
 
+            // Find current hour index for accurate wind data
+            const currentHourIndex = this.getCurrentHourIndex(hourly.time);
+
             // Wind rose data (past 24 hours)
             const windDirs = hourly.wind_direction_10m?.slice(0, 24) || [];
             const windSpeeds = hourly.wind_speed_10m?.slice(0, 24) || [];

@@ -1,6 +1,6 @@
 export function createWeatherCard(title, icon) {
     return `
-    <div class="weather-widget-card p-6">
+    <div class="weather-widget-card pt-2 md:p-6">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <i class="ph ${icon} text-2xl"></i>
