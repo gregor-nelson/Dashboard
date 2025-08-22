@@ -1759,10 +1759,23 @@ export const advancedWeather = {
             const units = this.getUnits();
             const tempUnit = units === 'metric' ? '°C' : '°F';
             
-            // Calculate averages for comparison
-            const avgMaxTemp = daily.temperature_2m_max.reduce((a, b) => a + b, 0) / daily.temperature_2m_max.length;
-            const avgMinTemp = daily.temperature_2m_min.reduce((a, b) => a + b, 0) / daily.temperature_2m_min.length;
+            // Filter out days with null temperature data
+            const validDays = daily.time
+                .map((dateStr, i) => ({
+                    date: dateStr,
+                    maxTemp: daily.temperature_2m_max[i],
+                    minTemp: daily.temperature_2m_min[i],
+                    precip: daily.precipitation_sum[i] || 0
+                }))
+                .filter(day => day.maxTemp !== null && day.minTemp !== null);
+            
+            // Calculate averages for comparison using valid days only
+            const avgMaxTemp = validDays.reduce((a, day) => a + day.maxTemp, 0) / validDays.length;
+            const avgMinTemp = validDays.reduce((a, day) => a + day.minTemp, 0) / validDays.length;
+            
+            // Calculate total precipitation using all available data (not just filtered days)
             const totalPrecip = daily.precipitation_sum.reduce((a, b) => a + (b || 0), 0);
+            const precipDays = daily.precipitation_sum.filter(p => p !== null).length;
             
             // Get today's forecast for comparison
             const todayMax = this.weatherData?.daily?.temperature_2m_max?.[0] || avgMaxTemp;
@@ -1772,27 +1785,26 @@ export const advancedWeather = {
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3 text-sm">
                         <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">7-Day Avg High</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Recent Avg High</div>
                             <div class="font-medium">${Math.round(avgMaxTemp)}${tempUnit}</div>
-                            <div class="text-xs ${todayMax > avgMaxTemp ? 'text-red-400 dark:text-red-400 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}">
-                                Today: ${todayMax > avgMaxTemp ? '+' : ''}${Math.round(todayMax - avgMaxTemp)}°
-                            </div>
                         </div>
                         <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">7-Day Avg Low</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Recent Avg Low</div>
                             <div class="font-medium">${Math.round(avgMinTemp)}${tempUnit}</div>
-                            <div class="text-xs ${todayMin > avgMinTemp ? 'text-red-400 dark:text-red-400 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}">
-                                Today: ${todayMin > avgMinTemp ? '+' : ''}${Math.round(todayMin - avgMinTemp)}°
-                            </div>
                         </div>
                     </div>
                     
                     <div class="p-3">
-                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Past 7 Days Temperature Range</div>
+                        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Past ${validDays.length} Days Temperature Range</div>
                         <div class="space-y-1">
-                            ${daily.time.map((dateStr, i) => {
-                                const date = new Date(dateStr);
-                                const dayLabel = i === daily.time.length - 1 ? 'Yesterday' : 
+                            ${validDays.map((day) => {
+                                const date = new Date(day.date);
+                                const today = new Date();
+                                const yesterday = new Date(today);
+                                yesterday.setDate(today.getDate() - 1);
+
+                                const isYesterday = date.toDateString() === yesterday.toDateString();
+                                const dayLabel = isYesterday ? 'Yesterday' : 
                                                date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
                                 
                                 return `
@@ -1802,7 +1814,7 @@ export const advancedWeather = {
                                             <div class="absolute h-full bg-blue-500 dark:bg-blue-400 rounded" style="width: 50%; left: 25%"></div>
                                         </div>
                                         <span class="text-xs text-neutral-500 dark:text-neutral-400 w-16 text-right">
-                                            ${Math.round(daily.temperature_2m_min[i])}° / ${Math.round(daily.temperature_2m_max[i])}°
+                                            ${Math.round(day.minTemp)}° / ${Math.round(day.maxTemp)}°
                                         </span>
                                     </div>
                                 `;
@@ -1813,7 +1825,7 @@ export const advancedWeather = {
                     <div class="p-3">
                         <div class="text-center">
                             <div class="text-lg font-medium text-blue-600 dark:text-blue-400 mb-1">${totalPrecip.toFixed(1)}mm</div>
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400">Total precipitation last 7 days</div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">Total precipitation last ${precipDays} days</div>
                         </div>
                     </div>
                 </div>
