@@ -222,8 +222,8 @@ const services = {
                 latitude: lat,
                 longitude: lon,
                 timezone,
-                current: ['wave_height', 'wave_direction', 'wave_period', 'wind_wave_height', 'wind_wave_direction', 'wind_wave_period'].join(','),
-                hourly: ['wave_height', 'wave_direction', 'wave_period', 'wind_wave_height', 'wind_wave_direction', 'wind_wave_period'].join(','),
+                current: ['wave_height', 'wave_direction', 'wave_period', 'wind_wave_height', 'wind_wave_direction', 'wind_wave_period', 'swell_wave_height', 'swell_wave_direction', 'swell_wave_period'].join(','),
+                hourly: ['wave_height', 'wave_direction', 'wave_period', 'wind_wave_height', 'wind_wave_direction', 'wind_wave_period', 'swell_wave_height', 'swell_wave_direction', 'swell_wave_period'].join(','),
                 forecast_hours: 48
             });
             

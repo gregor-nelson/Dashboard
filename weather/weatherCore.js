@@ -946,7 +946,7 @@ export const advancedWeather = {
                     this.renderAirQuality(contentEl);
                     break;
                 case 'marine':
-                    this.renderMarine(contentEl);
+                    contentEl.innerHTML = this.renderNotAvailable('Marine data now handled by dedicated Marine Weather widget', 'ph-waves');
                     break;
                 case 'history':
                     this.renderHistory(contentEl);
@@ -1708,46 +1708,6 @@ export const advancedWeather = {
             `;
         },
         
-        renderMarine(contentEl) {
-            if (!this.marineData?.current) {
-                contentEl.innerHTML = this.renderNotAvailable('Marine weather data not available for this location', 'ph-waves');
-                return;
-            }
-            
-            const current = this.marineData.current;
-            const waveHeight = current.wave_height || 0;
-            const waveDir = this.deps.utils.weatherUtils.getWindDirection(current.wave_direction || 0);
-            
-            contentEl.innerHTML = `
-                <div class="space-y-4">
-                    <div class="text-center p-4">
-                        <i class="ph ph-waves text-4xl text-blue-600 dark:text-blue-400 mb-3"></i>
-                        <div class="text-2xl font-bold mb-1">${waveHeight.toFixed(1)}m</div>
-                        <div class="text-sm text-neutral-500 dark:text-neutral-400">Significant Wave Height</div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wave Direction</div>
-                            <div class="font-medium">${waveDir}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">${Math.round(current.wave_direction || 0)}°</div>
-                        </div>
-                        <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wave Period</div>
-                            <div class="font-medium">${(current.wave_period || 0).toFixed(1)}s</div>
-                        </div>
-                        <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Height</div>
-                            <div class="font-medium">${(current.wind_wave_height || 0).toFixed(1)}m</div>
-                        </div>
-                        <div class="p-3 text-center">
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Period</div>
-                            <div class="font-medium">${(current.wind_wave_period || 0).toFixed(1)}s</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        },
         
         renderHistory(contentEl) {
             if (!this.historyData?.daily) {
