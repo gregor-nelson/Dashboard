@@ -432,39 +432,43 @@ export class MarineAnalysis {
             return '';
         });
 
-        // Prepare datasets for Chart.js
+        // Prepare datasets using Tailwind color values
         const datasets = [
             {
                 label: 'Swell Height',
                 data: dataToShow.map(item => item.swell_wave_height || 0),
-                backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                borderColor: 'rgba(59, 130, 246, 0.8)',
-                borderWidth: 1,
+                backgroundColor: 'rgb(59 130 246 / 0.3)', // bg-blue-500/30
+                borderColor: 'rgb(59 130 246 / 0.5)', // border-blue-500/50
+                borderWidth: 0,
                 fill: 'origin',
                 stack: 'waves',
-                tension: 0.2
+                tension: 0.4, // Smoother curves
+                pointRadius: 0,
+                pointHoverRadius: 0
             },
             {
                 label: 'Wind Waves',
                 data: dataToShow.map(item => item.wind_wave_height || 0),
-                backgroundColor: 'rgba(249, 115, 22, 0.6)',
-                borderColor: 'rgba(249, 115, 22, 0.8)',
-                borderWidth: 1,
-                fill: 'stack', // Fill as stacked area
+                backgroundColor: 'rgb(249 115 22 / 0.3)', // bg-orange-500/30
+                borderColor: 'rgb(249 115 22 / 0.5)', // border-orange-500/50
+                borderWidth: 0,
+                fill: 'stack',
                 stack: 'waves',
-                tension: 0.2
+                tension: 0.4,
+                pointRadius: 0,
+                pointHoverRadius: 0
             },
             {
                 label: 'Total Wave Height',
                 data: dataToShow.map(item => item.wave_height || 0),
                 backgroundColor: 'transparent',
-                borderColor: 'rgba(37, 99, 235, 1)',
-                borderWidth: 3,
+                borderColor: 'rgb(30 64 175)', // border-blue-800
+                borderWidth: 2,
                 fill: false,
                 type: 'line',
                 pointRadius: 0,
-                pointHoverRadius: 6,
-                tension: 0.2
+                pointHoverRadius: 0,
+                tension: 0.4
             }
         ];
 
@@ -485,15 +489,15 @@ export class MarineAnalysis {
 
         const ctx = canvas.getContext('2d');
         
-        // Define colors based on theme
+        // Define colors using app's neutral color scheme
         const colors = isDarkMode ? {
-            grid: 'rgba(115, 115, 115, 0.3)',
-            text: 'rgba(245, 245, 245, 0.8)',
-            nowLine: 'rgba(239, 68, 68, 0.8)'
+            grid: 'rgb(115 115 115 / 0.2)', // neutral-500/20
+            text: 'rgb(245 245 245)', // neutral-100
+            nowLine: 'rgb(248 113 113)' // red-400
         } : {
-            grid: 'rgba(163, 163, 163, 0.3)',
-            text: 'rgba(64, 64, 64, 0.8)',
-            nowLine: 'rgba(239, 68, 68, 0.8)'
+            grid: 'rgb(163 163 163 / 0.25)', // neutral-400/25
+            text: 'rgb(64 64 64)', // neutral-700
+            nowLine: 'rgb(239 68 68)' // red-500
         };
 
         const config = {
@@ -514,10 +518,15 @@ export class MarineAnalysis {
                         labels: {
                             color: colors.text,
                             usePointStyle: true,
-                            padding: 15,
+                            padding: 20, // space-y-5 equivalent
                             font: {
-                                size: 12
-                            }
+                                size: 12, // text-xs equivalent
+                                family: 'ui-sans-serif, system-ui, sans-serif', // Tailwind font-sans
+                                weight: '500' // font-medium
+                            },
+                            boxWidth: 12, // w-3 equivalent
+                            boxHeight: 8, // h-2 equivalent
+                            pointStyle: 'rect'
                         }
                     },
                     tooltip: {
@@ -531,12 +540,13 @@ export class MarineAnalysis {
                             if (!tooltipEl) {
                                 tooltipEl = document.createElement('div');
                                 tooltipEl.id = 'wave-chart-tooltip';
+                                // Using Tailwind-equivalent values in vanilla CSS (required for Chart.js)
                                 tooltipEl.style.cssText = `
                                     position: absolute;
                                     pointer-events: none;
                                     opacity: 0;
-                                    transition: opacity 0.2s ease;
-                                    z-index: 1000;
+                                    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+                                    z-index: 50;
                                 `;
                                 chart.canvas.parentNode.appendChild(tooltipEl);
                             }
@@ -552,13 +562,13 @@ export class MarineAnalysis {
                                 const dataIndex = tooltip.dataPoints[0].dataIndex;
                                 const data = chartData.rawData[dataIndex];
                                 
-                                // Create structured tooltip content
+                                // Create structured tooltip content matching app style
                                 const tooltipContent = `
-                                    <div class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-600 rounded-lg shadow-xl p-4 min-w-48 max-w-64">
+                                    <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg shadow-xl p-4 min-w-48 max-w-64">
                                         <!-- Time Header -->
                                         <div class="text-center mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-600">
                                             <div class="font-semibold text-neutral-800 dark:text-neutral-100">${data.dateLabel}</div>
-                                            <div class="text-sm text-neutral-600 dark:text-neutral-400">${data.timeLabel}</div>
+                                            <div class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">${data.timeLabel}</div>
                                         </div>
                                         
                                         <!-- Wave Heights Section -->
@@ -568,11 +578,11 @@ export class MarineAnalysis {
                                             <!-- Total Wave -->
                                             <div class="flex items-center justify-between py-1">
                                                 <div class="flex items-center gap-2">
-                                                    <div class="w-3 h-0.5 bg-blue-600 rounded"></div>
-                                                    <span class="text-sm text-neutral-700 dark:text-neutral-300">Total</span>
+                                                    <div class="w-3 h-0.5 bg-blue-800 dark:bg-blue-400 rounded"></div>
+                                                    <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Total</span>
                                                 </div>
                                                 <span class="font-semibold text-neutral-800 dark:text-neutral-100">
-                                                    ${(data.wave_height !== null && data.wave_height !== undefined) ? data.wave_height.toFixed(1) + 'm' : 'N/A'}
+                                                    ${(data.wave_height !== null && data.wave_height !== undefined) ? data.wave_height + 'm' : 'N/A'}
                                                 </span>
                                             </div>
                                             
@@ -583,7 +593,7 @@ export class MarineAnalysis {
                                                     <span class="text-sm text-neutral-700 dark:text-neutral-300">Swell</span>
                                                 </div>
                                                 <span class="font-medium text-neutral-700 dark:text-neutral-200">
-                                                    ${(data.swell_wave_height !== null && data.swell_wave_height !== undefined) ? data.swell_wave_height.toFixed(1) + 'm' : 'N/A'}
+                                                    ${(data.swell_wave_height !== null && data.swell_wave_height !== undefined) ? data.swell_wave_height + 'm' : 'N/A'}
                                                 </span>
                                             </div>
                                             
@@ -594,7 +604,7 @@ export class MarineAnalysis {
                                                     <span class="text-sm text-neutral-700 dark:text-neutral-300">Wind</span>
                                                 </div>
                                                 <span class="font-medium text-neutral-700 dark:text-neutral-200">
-                                                    ${(data.wind_wave_height !== null && data.wind_wave_height !== undefined) ? data.wind_wave_height.toFixed(1) + 'm' : 'N/A'}
+                                                    ${(data.wind_wave_height !== null && data.wind_wave_height !== undefined) ? data.wind_wave_height + 'm' : 'N/A'}
                                                 </span>
                                             </div>
                                         </div>
@@ -611,7 +621,7 @@ export class MarineAnalysis {
                                                 <div class="text-center">
                                                     <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Period</div>
                                                     <div class="font-medium text-neutral-700 dark:text-neutral-200">
-                                                        ${data.wave_period ? data.wave_period.toFixed(1) + 's' : 'N/A'}
+                                                        ${data.wave_period ? data.wave_period + 's' : 'N/A'}
                                                     </div>
                                                 </div>
                                             </div>
@@ -622,10 +632,19 @@ export class MarineAnalysis {
                                 tooltipEl.innerHTML = tooltipContent;
                             }
 
-                            // Position tooltip
+                            // Position tooltip with improved positioning
                             const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
-                            tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-                            tooltipEl.style.top = positionY + tooltip.caretY - tooltipEl.offsetHeight - 10 + 'px';
+                            const tooltipWidth = tooltipEl.offsetWidth;
+                            const tooltipHeight = tooltipEl.offsetHeight;
+                            const canvasWidth = chart.canvas.offsetWidth;
+                            
+                            // Smart positioning to keep tooltip in viewport
+                            let leftPos = positionX + tooltip.caretX - (tooltipWidth / 2);
+                            if (leftPos < positionX) leftPos = positionX + 8; // Left edge
+                            if (leftPos + tooltipWidth > positionX + canvasWidth) leftPos = positionX + canvasWidth - tooltipWidth - 8; // Right edge
+                            
+                            tooltipEl.style.left = leftPos + 'px';
+                            tooltipEl.style.top = positionY + tooltip.caretY - tooltipHeight - 12 + 'px';
                             tooltipEl.style.opacity = 1;
                         }
                     }
@@ -635,21 +654,27 @@ export class MarineAnalysis {
                         grid: {
                             color: colors.grid,
                             drawBorder: false,
+                            lineWidth: 1
                         },
                         ticks: {
                             color: colors.text,
                             font: {
-                                size: 11
-                            }
+                                size: 11, // text-xs equivalent
+                                family: 'ui-sans-serif, system-ui, sans-serif', // font-sans
+                                weight: '400' // font-normal
+                            },
+                            padding: 8 // p-2 equivalent
                         },
                         title: {
                             display: true,
                             text: 'Time',
                             color: colors.text,
                             font: {
-                                size: 12,
-                                weight: 'bold'
-                            }
+                                size: 12, // text-sm equivalent
+                                family: 'ui-sans-serif, system-ui, sans-serif',
+                                weight: '600' // font-semibold
+                            },
+                            padding: { top: 12, bottom: 0 } // pt-3
                         }
                     },
                     y: {
@@ -657,24 +682,30 @@ export class MarineAnalysis {
                         grid: {
                             color: colors.grid,
                             drawBorder: false,
+                            lineWidth: 1
                         },
                         ticks: {
                             color: colors.text,
                             font: {
-                                size: 11
+                                size: 11, // text-xs equivalent
+                                family: 'ui-sans-serif, system-ui, sans-serif',
+                                weight: '400'
                             },
+                            padding: 8, // p-2 equivalent
                             callback: function(value) {
                                 return value.toFixed(1) + 'm';
                             }
                         },
                         title: {
                             display: true,
-                            text: 'Wave Height (meters)',
+                            text: 'Wave Height (m)',
                             color: colors.text,
                             font: {
-                                size: 12,
-                                weight: 'bold'
-                            }
+                                size: 12, // text-sm equivalent
+                                family: 'ui-sans-serif, system-ui, sans-serif',
+                                weight: '600'
+                            },
+                            padding: { left: 0, right: 12 } // pr-3
                         }
                     }
                 },
@@ -773,9 +804,9 @@ export class MarineAnalysis {
         }
 
         return `
-            <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4 mt-4">
+            <div class="p-4 mt-4">
                 <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">Wave Direction Evolution</h4>
-                <div class="relative h-16 bg-neutral-50 dark:bg-neutral-800 rounded border">
+                <div class="relative h-16">
                     ${directionIndicators}
                 </div>
                 <div class="flex items-center justify-center gap-4 mt-3 text-xs">
@@ -850,10 +881,10 @@ export class MarineAnalysis {
         contentEl.innerHTML = `
             <div class="space-y-4">
                 <!-- Primary Wave Display -->
-                <div class="text-center p-6 bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg">
-                    <i class="ph ph-waves text-4xl text-neutral-600 dark:text-neutral-300 mb-3"></i>
-                    <div class="text-4xl font-bold mb-2 text-neutral-800 dark:text-neutral-100">${waveHeight !== null && waveHeight !== undefined ? waveHeight.toFixed(1) + 'm' : 'N/A'}</div>
-                    <div class="text-sm font-medium text-neutral-600 dark:text-neutral-300 mb-3">Significant Wave Height</div>
+                <div class="text-center">
+                    <i class="ph ph-waves text-5xl mb-3"></i>
+                    <div class="text-4xl font-bold mb-2">${waveHeight !== null && waveHeight !== undefined ? waveHeight.toFixed(1) + 'm' : 'N/A'}</div>
+                    <div class="text-lg text-neutral-500 dark:text-neutral-400 mb-1">Significant Wave Height</div>
                     
                     ${seaState ? `
                         <div class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border ${this.getSeaStateColorNeutral(seaState.severity)}">
@@ -862,7 +893,7 @@ export class MarineAnalysis {
                     ` : ''}
                     
                     ${waveTrend && !waveTrend.error ? `
-                        <div class="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-600">
+                        <div class="mt-4 pt-3">
                             <div class="flex items-center justify-center gap-2 text-sm">
                                 <i class="ph ${this.getTrendIcon(waveTrend.trend)} text-lg ${this.getTrendColorNeutral(waveTrend.trend)}"></i>
                                 <span class="font-medium text-neutral-700 dark:text-neutral-200">
@@ -878,8 +909,8 @@ export class MarineAnalysis {
 
                 <!-- Cross-Sea Warning (only for high severity) -->
                 ${crossSea && crossSea.isCrossSea && crossSea.severity === 'high' ? `
-                    <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
-                        <div class="flex items-center gap-2 text-red-700 dark:text-red-300">
+                    <div class="p-4 bg-red-500 dark:bg-red-900 bg-opacity-20 rounded-lg">
+                        <div class="flex items-center gap-2 text-red-300 dark:text-red-400">
                             <i class="ph ph-warning text-lg"></i>
                             <span class="font-semibold">Cross-Sea Warning</span>
                         </div>
@@ -891,30 +922,50 @@ export class MarineAnalysis {
 
                 <!-- Wave Component Breakdown -->
                 ${waveComponents && !waveComponents.error ? `
-                    <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4">
-                        <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">Wave Components</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center">
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Swell</div>
-                                <div class="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                                    ${waveComponents.swellHeight !== null && waveComponents.swellHeight !== undefined ? waveComponents.swellHeight.toFixed(1) + 'm' : 'N/A'}
-                                </div>
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400">
-                                    ${waveComponents.swellPercentage !== null ? waveComponents.swellPercentage + '%' : 'N/A'}
-                                </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div class="text-center p-3">
+                            <i class="ph ph-waves text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Swell</div>
+                            <div class="font-medium">
+                                ${waveComponents.swellHeight !== null && waveComponents.swellHeight !== undefined ? waveComponents.swellHeight.toFixed(1) + 'm' : 'N/A'}
                             </div>
-                            <div class="text-center">
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Waves</div>
-                                <div class="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                                    ${(waveComponents.windWaveHeight !== null && waveComponents.windWaveHeight !== undefined) ? waveComponents.windWaveHeight.toFixed(1) + 'm' : 'N/A'}
-                                </div>
-                                <div class="text-xs text-neutral-500 dark:text-neutral-400">
-                                    ${waveComponents.windPercentage !== null ? waveComponents.windPercentage + '%' : 'N/A'}
-                                </div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                ${waveComponents.swellPercentage !== null ? waveComponents.swellPercentage + '%' : ''}
                             </div>
                         </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-wind text-orange-600 dark:text-orange-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Waves</div>
+                            <div class="font-medium">
+                                ${(waveComponents.windWaveHeight !== null && waveComponents.windWaveHeight !== undefined) ? waveComponents.windWaveHeight.toFixed(1) + 'm' : 'N/A'}
+                            </div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                ${waveComponents.windPercentage !== null ? waveComponents.windPercentage + '%' : ''}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-compass text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Direction</div>
+                            <div class="font-medium">
+                                ${waveDirection !== null && waveDirection !== undefined ? weatherUtils.getWindDirection(waveDirection) : 'N/A'}
+                            </div>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                ${waveDirection !== null && waveDirection !== undefined ? Math.round(waveDirection) + '°' : ''}
+                            </div>
+                        </div>
+                        <div class="text-center p-3">
+                            <i class="ph ph-clock text-neutral-500 dark:text-neutral-400 text-lg mb-1"></i>
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Period</div>
+                            <div class="font-medium">
+                                ${wavePeriod !== null && wavePeriod !== undefined ? wavePeriod.toFixed(1) + 's' : 'N/A'}
+                            </div>
+                            ${periodInfo && !periodInfo.error && wavePeriod !== null && wavePeriod !== undefined ? `
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400">${periodInfo.description}</div>
+                            ` : ''}
+                        </div>
+                    </div>
                         ${waveComponents.dominantSource ? `
-                            <div class="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-600 text-center">
+                            <div class="mt-3 pt-3 text-center">
                                 <span class="text-xs text-neutral-600 dark:text-neutral-300">
                                     Dominated by ${waveComponents.dominantSource === 'swell' ? 'long-period swells' : 'local wind waves'}
                                 </span>
@@ -922,7 +973,7 @@ export class MarineAnalysis {
                         ` : ''}
                     </div>
                 ` : waveComponents && waveComponents.error ? `
-                    <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4">
+                    <div class="p-4">
                         <div class="text-center text-neutral-500 dark:text-neutral-400">
                             <i class="ph ph-warning text-lg mb-2"></i>
                             <p class="text-sm">Wave component data unavailable</p>
@@ -932,13 +983,13 @@ export class MarineAnalysis {
 
                 <!-- Wave Forecast Charts -->
                 ${hourlyData ? `
-                    <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4">
+                    <div class="p-4">
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">48-Hour Wave Forecast</h4>
+                            <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Wave Forecast</h4>
                             <div class="flex gap-2">
-                                <button class="time-range-btn px-2 py-1 text-xs rounded border bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600" data-range="12">12h</button>
-                                <button class="time-range-btn px-2 py-1 text-xs rounded border bg-neutral-50 text-neutral-600 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-600" data-range="24">24h</button>
-                                <button class="time-range-btn px-2 py-1 text-xs rounded border bg-neutral-50 text-neutral-600 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-600" data-range="48">48h</button>
+                                <button class="time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors bg-neutral-800 text-neutral-100 dark:bg-neutral-200 dark:text-neutral-800" data-range="12">12h</button>
+                                <button class="time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors text-neutral-500 dark:text-neutral-400" data-range="24">24h</button>
+                                <button class="time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors text-neutral-500 dark:text-neutral-400" data-range="48">48h</button>
                             </div>
                         </div>
                         <div class="relative" style="height: 300px; width: 100%;">
@@ -951,10 +1002,10 @@ export class MarineAnalysis {
                 ` : ''}
 
                 <!-- Wave Details Grid -->
-                <div class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4">
+                <div class="p-4">
                     <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-3">Wave Details</h4>
                     <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div class="text-center">
+                        <div class="text-center p-3">
                             <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Direction</div>
                             <div class="font-semibold text-neutral-800 dark:text-neutral-100">
                                 ${waveDirection !== null && waveDirection !== undefined ? weatherUtils.getWindDirection(waveDirection) : 'N/A'}
@@ -963,7 +1014,7 @@ export class MarineAnalysis {
                                 ${waveDirection !== null && waveDirection !== undefined ? Math.round(waveDirection) + '°' : 'N/A'}
                             </div>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center p-3">
                             <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Period</div>
                             <div class="font-semibold text-neutral-800 dark:text-neutral-100">
                                 ${wavePeriod !== null && wavePeriod !== undefined ? wavePeriod.toFixed(1) + 's' : 'N/A'}
@@ -973,7 +1024,7 @@ export class MarineAnalysis {
                             ` : ''}
                         </div>
                         ${crossSea && !crossSea.isCrossSea ? `
-                            <div class="text-center">
+                            <div class="text-center p-3">
                                 <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Dir</div>
                                 <div class="font-semibold text-neutral-800 dark:text-neutral-100">
                                     ${windWaveDirection !== null && windWaveDirection !== undefined ? weatherUtils.getWindDirection(windWaveDirection) : 'N/A'}
@@ -982,7 +1033,7 @@ export class MarineAnalysis {
                                     ${windWaveDirection !== null && windWaveDirection !== undefined ? Math.round(windWaveDirection) + '°' : 'N/A'}
                                 </div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center p-3">
                                 <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Wind Wave Period</div>
                                 <div class="font-semibold text-neutral-800 dark:text-neutral-100">
                                     ${current.wind_wave_period !== null && current.wind_wave_period !== undefined ? current.wind_wave_period.toFixed(1) + 's' : 'N/A'}
@@ -992,7 +1043,7 @@ export class MarineAnalysis {
                     </div>
                     
                     ${periodInfo && !periodInfo.error || (crossSea && crossSea.isCrossSea && crossSea.severity !== 'high') ? `
-                        <div class="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-600 text-center">
+                        <div class="mt-3 pt-3 text-center">
                             <div class="flex items-center justify-center gap-2 text-xs flex-wrap">
                                 ${periodInfo && !periodInfo.error ? `
                                     <span class="text-neutral-600 dark:text-neutral-300">Wave Type:</span>
@@ -1023,7 +1074,7 @@ export class MarineAnalysis {
                             <span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Technical Analysis</span>
                             <i class="ph ph-caret-down text-neutral-500 dark:text-neutral-400 group-open:rotate-180 transition-transform"></i>
                         </summary>
-                        <div class="mt-2 p-4 bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg space-y-3">
+                        <div class="mt-2 p-4 space-y-3">
                             ${waveComponents && waveComponents.dataAvailable ? `
                                 <div class="text-xs">
                                     <span class="font-medium text-neutral-700 dark:text-neutral-200">Data Source:</span>
@@ -1091,9 +1142,24 @@ export class MarineAnalysis {
                             if (chartData) {
                                 const chart = this.createWaveChart(chartId, chartData, isDarkMode);
                                 
-                                // Single resize after creation
+                                // Force stacking recalculation after chart creation
                                 if (chart) {
-                                    requestAnimationFrame(() => chart.resize());
+                                    // Multi-step approach to ensure proper stacking calculation
+                                    requestAnimationFrame(() => {
+                                        // Step 1: Resize to establish proper dimensions
+                                        chart.resize();
+                                        
+                                        // Step 2: Force a complete re-render with proper stacking
+                                        requestAnimationFrame(() => {
+                                            // Trigger internal stacking recalculation by updating with animation
+                                            chart.update('active');
+                                            
+                                            // Step 3: Final resize to ensure everything is properly positioned
+                                            requestAnimationFrame(() => {
+                                                chart.resize();
+                                            });
+                                        });
+                                    });
                                 }
                                 
                                 // Add time range button functionality
@@ -1105,25 +1171,32 @@ export class MarineAnalysis {
                             e.preventDefault();
                             const newRange = parseInt(e.target.dataset.range);
                             
-                            // Update button states
+                            // Update button states matching app style
                             timeRangeButtons.forEach(b => {
-                                b.className = 'time-range-btn px-2 py-1 text-xs rounded border bg-neutral-50 text-neutral-600 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-600';
+                                b.className = 'time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors text-neutral-500 dark:text-neutral-400';
                             });
-                            e.target.className = 'time-range-btn px-2 py-1 text-xs rounded border bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600';
+                            e.target.className = 'time-range-btn px-3 py-2 text-xs rounded border border-neutral-300 dark:border-neutral-600 transition-colors bg-neutral-800 text-neutral-100 dark:bg-neutral-200 dark:text-neutral-800';
                             
                             // Update chart data
                             const newChartData = this.prepareChartData(hourlyData, newRange);
                             if (newChartData && currentChart) {
                                 currentChart.data.labels = newChartData.labels;
                                 currentChart.data.datasets = newChartData.datasets;
-                                currentChart.update('active');
                                 
-                                // Force resize after update to ensure proper stacking render
-                                setTimeout(() => {
-                                    if (currentChart) {
+                                // Multi-step update to ensure proper stacking, minimize flash
+                                requestAnimationFrame(() => {
+                                    // Use 'none' mode to reduce visual artifacts
+                                    currentChart.update('none');
+                                    
+                                    requestAnimationFrame(() => {
                                         currentChart.resize();
-                                    }
-                                }, 10);
+                                        
+                                        // Use shorter delay for final update to reduce flash duration
+                                        setTimeout(() => {
+                                            currentChart.update('active');
+                                        }, 5);
+                                    });
+                                });
                             }
                             
                             // Update direction panel
